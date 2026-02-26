@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📊 주식 전문가 대시보드 — 메인 허브</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--green:#3fb950;--yellow:#d29922;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--orange:#f0883e;--accent:#1f6feb;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;}
+.header{background:linear-gradient(135deg,#0d1117,#161b22,#1c2333);border-bottom:2px solid var(--accent);padding:28px 40px;text-align:center;}
+.header h1{font-size:2rem;font-weight:900;letter-spacing:-.02em;}
+.header h1 span{color:var(--blue);}
+.header p{color:var(--muted);margin-top:6px;font-size:.9rem;}
+.header-meta{display:flex;justify-content:center;gap:12px;margin-top:14px;flex-wrap:wrap;}
+.badge{padding:5px 14px;border-radius:20px;font-size:.75rem;font-weight:700;}
+.badge-live{background:#1a2940;border:1px solid var(--blue);color:var(--blue);display:flex;align-items:center;gap:5px;}
+.badge-date{background:#1a3020;border:1px solid var(--green);color:var(--green);}
+.badge-count{background:#2a1f3d;border:1px solid var(--purple);color:var(--purple);}
+.pulse{width:7px;height:7px;background:var(--blue);border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3;transform:scale(1.4)}}
+.container{max-width:1400px;margin:0 auto;padding:32px 36px;}
+
+/* 퀵 지표 */
+.quick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:32px;}
+@media(max-width:900px){.quick-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){.quick-grid{grid-template-columns:repeat(2,1fr);}}
+.qstat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.qstat .ql{font-size:.68rem;color:var(--muted);margin-bottom:4px;}
+.qstat .qv{font-size:1.3rem;font-weight:800;}
+.qstat .qc{font-size:.68rem;margin-top:2px;font-weight:600;}
+.qstat.green .qv{color:var(--green);}
+.qstat.red .qv{color:var(--red);}
+.qstat.yellow .qv{color:var(--yellow);}
+.qstat.blue .qv{color:var(--blue);}
+.qstat.purple .qv{color:var(--purple);}
+.qsrc{font-size:.6rem;color:#444d56;margin-top:3px;}
+
+/* 섹션 타이틀 */
+.sec-title{font-size:.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px;border-left:3px solid var(--accent);padding-left:10px;}
+
+/* 대시보드 그리드 */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+@media(max-width:1100px){.dash-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:750px){.dash-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.dash-grid{grid-template-columns:1fr;}}
+.dash-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:0;overflow:hidden;text-decoration:none;color:var(--text);transition:.25s;display:block;position:relative;}
+.dash-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 8px 32px rgba(31,111,235,.2);}
+.dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.dash-card.c1::before{background:var(--blue);}
+.dash-card.c2::before{background:var(--yellow);}
+.dash-card.c3::before{background:var(--green);}
+.dash-card.c4::before{background:var(--orange);}
+.dash-card.c5::before{background:var(--purple);}
+.dash-card.c6::before{background:linear-gradient(90deg,var(--blue),var(--purple));}
+.dash-card.c7::before{background:var(--red);}
+.dash-card.c8::before{background:linear-gradient(90deg,var(--green),var(--blue));}
+.dash-inner{padding:18px 20px;}
+.dash-num{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.dash-icon{font-size:1.8rem;margin-bottom:8px;display:block;}
+.dash-title{font-size:.95rem;font-weight:800;margin-bottom:5px;}
+.dash-desc{font-size:.74rem;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+.dash-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.dtag{font-size:.64rem;padding:2px 7px;border-radius:6px;font-weight:600;background:#21262d;color:var(--muted);border:1px solid var(--border);}
+.dash-footer{border-top:1px solid var(--border);padding:9px 20px;font-size:.7rem;color:var(--muted);display:flex;align-items:center;justify-content:space-between;}
+.dash-arrow{color:var(--accent);font-weight:700;}
+.updated-fresh{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;padding:2px 7px;border-radius:6px;font-size:.64rem;font-weight:600;}
+.updated-old{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;padding:2px 7px;border-radius:6px;font-size:.64rem;font-weight:600;}
+
+/* 균형 스코어 박스 */
+.balance-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+@media(max-width:600px){.balance-row{grid-template-columns:1fr;}}
+.bal-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;}
+.bal-box.up{border-top:3px solid var(--green);}
+.bal-box.dn{border-top:3px solid var(--red);}
+.bal-num{font-size:2.4rem;font-weight:900;}
+.bal-bar{background:#21262d;border-radius:6px;height:8px;overflow:hidden;margin:8px 0;}
+.bal-fill{height:100%;border-radius:6px;}
+
+/* 사용법 */
+.howto{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:24px;}
+.howto h3{font-size:.88rem;font-weight:700;margin-bottom:12px;color:var(--blue);}
+.step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:700px){.step-grid{grid-template-columns:repeat(2,1fr);}}
+.step{text-align:center;padding:12px 8px;}
+.step-num{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;}
+.step p{font-size:.72rem;color:var(--muted);line-height:1.5;}
+.step strong{color:var(--text);}
+.footer{text-align:center;color:var(--muted);font-size:.75rem;padding:24px;border-top:1px solid var(--border);margin-top:12px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 <span>주식 전문가 대시보드</span></h1>
+  <p>KOSPI 시장 구조 분석 시스템 — 8단계 완전 분석 프레임워크</p>
+  <div class="header-meta">
+    <span class="badge badge-live"><span class="pulse"></span>최신 데이터</span>
+    <span class="badge badge-date">📅 2026-02-26 업데이트</span>
+    <span class="badge badge-count">📊 8개 대시보드</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 핵심 지표 퀵뷰 -->
+  <div class="sec-title" style="margin-bottom:14px;">📡 핵심 시장 지표 (2026-02-25 기준)</div>
+  <div class="quick-grid">
+    <div class="qstat green">
+      <div class="ql">KOSPI</div>
+      <div class="qv">5,969.64</div>
+      <div class="qc" style="color:var(--green);">+2.11% ↑</div>
+      <div class="qsrc">KRX · 2026-02-24</div>
+    </div>
+    <div class="qstat red">
+      <div class="ql">VKOSPI</div>
+      <div class="qv">49.57</div>
+      <div class="qc" style="color:var(--red);">공포구간 ⚠️</div>
+      <div class="qsrc">Investing.com · 2026-02-25</div>
+    </div>
+    <div class="qstat yellow">
+      <div class="ql">한국 기준금리</div>
+      <div class="qv">2.50%</div>
+      <div class="qc" style="color:var(--muted);">6회 연속 동결</div>
+      <div class="qsrc">BOK · 2026-02-26</div>
+    </div>
+    <div class="qstat blue">
+      <div class="ql">달러 인덱스 (DXY)</div>
+      <div class="qv">97.84</div>
+      <div class="qc" style="color:var(--green);">약세 → 위험자산 ↑</div>
+      <div class="qsrc">Investing.com · 2026-02-24</div>
+    </div>
+    <div class="qstat green">
+      <div class="ql">원/달러</div>
+      <div class="qv">1,429</div>
+      <div class="qc" style="color:var(--muted);">2026-02-25</div>
+      <div class="qsrc">우리은행·연합뉴스</div>
+    </div>
+    <div class="qstat purple">
+      <div class="ql">KOSPI PBR</div>
+      <div class="qv">1.91×</div>
+      <div class="qc" style="color:var(--yellow);">PER 24.37×</div>
+      <div class="qsrc">INDEXerGO · 2026-02-23</div>
+    </div>
+    <div class="qstat red">
+      <div class="ql">신용잔고 (최고)</div>
+      <div class="qv">149.17조</div>
+      <div class="qc" style="color:var(--red);">역대 최고 ⚠️</div>
+      <div class="qsrc">금투협 · 2026-02-25</div>
+    </div>
+    <div class="qstat green">
+      <div class="ql">제조업 PMI</div>
+      <div class="qv">51.2</div>
+      <div class="qc" style="color:var(--green);">17개월 최고</div>
+      <div class="qsrc">S&P Global · 2026-01</div>
+    </div>
+    <div class="qstat blue">
+      <div class="ql">회사채 AA- 스프레드</div>
+      <div class="qv">53.2bp</div>
+      <div class="qc" style="color:var(--green);">안정 구간</div>
+      <div class="qsrc">INDEXerGO · 2026-02-25</div>
+    </div>
+    <div class="qstat yellow">
+      <div class="ql">미국 Fed 금리</div>
+      <div class="qv">3.625%</div>
+      <div class="qc" style="color:var(--muted);">동결 · 2026-01-28</div>
+      <div class="qsrc">연방준비제도</div>
+    </div>
+  </div>
+
+  <!-- 균형 스코어 -->
+  <div class="sec-title">⚖️ KOSPI 균형 분석 스코어 (2026-02-24 기준)</div>
+  <div class="balance-row">
+    <div class="bal-box up">
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:6px;">📈 상승 모멘텀</div>
+      <div class="bal-num" style="color:var(--green);">38 / 50</div>
+      <div class="bal-bar"><div class="bal-fill" style="width:76%;background:var(--green);"></div></div>
+      <div style="font-size:.72rem;color:var(--muted);">기관 대매수 · 외인 선물 롱 · 4일 상승</div>
+    </div>
+    <div class="bal-box dn">
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:6px;">📉 위험 긴장도</div>
+      <div class="bal-num" style="color:var(--red);">34 / 50</div>
+      <div class="bal-bar"><div class="bal-fill" style="width:68%;background:var(--red);"></div></div>
+      <div style="font-size:.72rem;color:var(--muted);">신용잔고 최고 · VKOSPI 49 · 헤지 숏</div>
+    </div>
+  </div>
+  <div style="background:#1c2333;border-radius:10px;padding:12px 16px;font-size:.78rem;color:var(--muted);margin-bottom:28px;">
+    💡 <strong style="color:var(--blue);">종합 판단:</strong> 헤지 주도 랠리 구조. 상승 모멘텀 우위이나 변동성 확대 경계 구간. <strong style="color:var(--yellow);">단일 충격 시 양방향 급변 가능.</strong>
+    → 자세한 분석은 8번 대시보드 참조.
+  </div>
+
+  <!-- 대시보드 그리드 -->
+  <div class="sec-title">🗂️ 8단계 분석 대시보드</div>
+  <div class="dash-grid">
+
+    <a href="dashboard_1_liquidity.html" class="dash-card c1">
+      <div class="dash-inner">
+        <div class="dash-num">STEP 01 <span class="updated-fresh">최신</span></div>
+        <span class="dash-icon">💧</span>
+        <div class="dash-title">유동성 방향 감지 엔진</div>
+        <div class="dash-desc">Fed·BOK 금리, M2, DXY, 글로벌 ETF 자금 흐름 분석</div>
+        <div class="dash-tags">
+          <span class="dtag">BOK 2.5%</span>
+          <span class="dtag">DXY 97.84</span>
+          <span class="dtag">PMI 51.2</span>
+        </div>
+      </div>
+      <div class="dash-footer"><span>유동성 분석</span><span class="dash-arrow">→</span></div>
+    </a>
+
+    <a href="dashboard_2_valuation.html" class="dash-card c2">
+      <div class="dash-inner">
+        <div class="dash-num">STEP 02 <span class="updated-fresh">최신</span></div>
+        <span class="dash-icon">📊</span>
+        <div class="dash-title">밸류에이션 왜곡 탐지기</div>
+        <div class="dash-desc">PER·PBR·ERP·회사채 스프레드 | 섹터별 과·저평가 분석</div>
+        <div class="dash-tags">
+          <span class="dtag">PER 24.37×</span>
+          <span class="dtag">PBR 1.91×</span>
+          <span class="dtag">Forward 10.1×</span>
+        </div>
+      </div>
+      <div class="dash-footer"><span>밸류에이션 분석</span><span class="dash-arrow">→</span></div>
+    </a>
+
+    <a href="dashboard_3_supply_demand.html" class="dash-card c3">
+      <div class="dash-inner">
+        <div class="dash-num">STEP 03 <span class="updated-fresh">최신</span></div>
+        <span class="dash-icon">📡</span>
+        <div class="dash-title">수급 구조 역전 포착기</div>
+        <div class="dash-desc">투자자별 순매수·선물·신용잔고·VKOSPI 수급 분석</div>
+        <div class="dash-tags">
+          <span class="dtag">기관 +2.38조</span>
+          <span class="dtag">신용 149조⚠️</span>
+          <span class="dtag">VKOSPI 49</span>
+        </div>
+      </div>
+      <div class="dash-footer"><span>수급 분석</span><span class="dash-arrow">→</span></div>
+    </a>
+
+    <a href="dashboard_4_industry_cycle.html" class="dash-card c4">
+      <div class="dash-inner">
+        <div class="dash-num">STEP 04 <span class="updated-fresh">최신</span></div>
+        <span class="dash-icon">⚙️</span>
+        <div class="dash-title">산업 사이클 위치 진단</div>
+        <div class="dash-desc">반도체·조선·금융·에너지 사이클 단계 및 전략</div>
+        <div class="dash-tags">
+          <span class="dtag">반도체 후기</span>
+          <span class="dtag">조선 중기</span>
+          <span class="dtag">금융 회복</span>
+        </div>
+      </div>
+      <div class="dash-footer"><span>산업 사이클</span><span class="dash-arrow">→</span></div>
+    </a>
+
+    <a href="dashboard_5_narrative_vs_numbers.html" class="dash-card c5">
+      <div class="dash-inner">
+        <div class="dash-num">STEP 05 <span class="updated-fresh">최신</span></div>
+        <span class="dash-icon">📰</span>
+        <div class="dash-title">서사 vs 숫자 괴리 분석</div>
+        <div class="dash-desc">AI 서사·ESG·밸류업 — 시장 기대와 실제 실적 차이</div>
+        <div class="dash-tags">
+          <span class="dtag">AI PER 38×</span>
+          <span class="dtag">은행 +22.5%</span>
+          <span class="dtag">EPS +7%</span>
+        </div>
+      </div>
+      <div class="dash-footer"><span>서사 분석</span><span class="dash-arrow">→</span></div>
+    </a>
+
+    <a href="dashboard_6_macro_scenarios.html" class="dash-card c6">
+      <div class="dash-inner">
+        <div class="dash-num">STEP 06 <span class="updated-fresh">최신</span></div>
+        <span class="dash-icon">🌐</span>
+        <div class="dash-title">거시 시나리오 확률 게임</div>
+        <div class="dash-desc">4대 시나리오 (소프트랜딩·스태그·회복·침체) 확률 배분</div>
+        <div class="dash-tags">
+          <span class="dtag">소프트랜딩 40%</span>
+          <span class="dtag">스태그 25%</span>
+          <span class="dtag">침체 15%</span>
+        </div>
+      </div>
+      <div class="dash-footer"><span>거시 분석</span><span class="dash-arrow">→</span></div>
+    </a>
+
+    <a href="dashboard_7_bankruptcy_risk.html" class="dash-card c7">
+      <div class="dash-inner">
+        <div class="dash-num">STEP 07 <span class="updated-fresh">최신</span></div>
+        <span class="dash-icon">☠️</span>
+        <div class="dash-title">파산 위험 탐지기</div>
+        <div class="dash-desc">신용 스프레드·신용잔고·Z-스코어 · 조기 경보 체크리스트</div>
+        <div class="dash-tags">
+          <span class="dtag">스프레드 53bp</span>
+          <span class="dtag">신용 149조⚠️</span>
+          <span class="dtag">VKOSPI 49</span>
+        </div>
+      </div>
+      <div class="dash-footer"><span>파산 위험 분석</span><span class="dash-arrow">→</span></div>
+    </a>
+
+    <a href="dashboard_neutral.html" class="dash-card c8">
+      <div class="dash-inner">
+        <div class="dash-num">STEP 08 <span class="updated-fresh">최신·신규</span></div>
+        <span class="dash-icon">⚖️</span>
+        <div class="dash-title">KOSPI 균형 분석</div>
+        <div class="dash-desc">헤지 주도 랠리 구조 · 강세/약세 이중 관점 · 편향 공시</div>
+        <div class="dash-tags">
+          <span class="dtag">모멘텀 38/50</span>
+          <span class="dtag">위험 34/50</span>
+          <span class="dtag">편향공시</span>
+        </div>
+      </div>
+      <div class="dash-footer"><span>균형 분석</span><span class="dash-arrow">→</span></div>
+    </a>
+
+  </div>
+
+  <!-- 사용법 -->
+  <div class="howto">
+    <h3>📖 이 대시보드를 활용하는 방법</h3>
+    <div class="step-grid">
+      <div class="step"><div class="step-num">1</div><p><strong>유동성 확인</strong><br>Step 1: 시장에 돈이 들어오는지 확인</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>밸류에이션</strong><br>Step 2~3: 과열·저평가 섹터 파악</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>시나리오</strong><br>Step 4~6: 산업 사이클과 거시 방향 결합</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>리스크 점검</strong><br>Step 7~8: 파산·신용 위험 + 균형 판단</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  📅 최종 업데이트: 2026-02-26 · 데이터 출처: KRX, BOK, FRED, Investing.com, Bloomberg, S&P Global, INDEXerGO, 금투협, 연합뉴스<br>
+  ⚠️ 본 자료는 투자 조언이 아닙니다. 참고용으로만 사용하시기 바랍니다.
+</div>
+
+</body>
+</html>

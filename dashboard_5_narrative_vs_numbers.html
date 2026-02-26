@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📰 Dashboard 5 — 서사 vs 숫자 괴리 분석</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--green:#3fb950;--yellow:#d29922;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--orange:#f0883e;--accent:#1f6feb;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;}
+.topbar{background:#161b22;border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.back-btn{background:#21262d;border:1px solid var(--border);color:var(--blue);padding:6px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:700;}
+.breadcrumb{font-size:.78rem;color:var(--muted);}
+.nav-btns{display:flex;gap:8px;}
+.nav-btn{background:#21262d;border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:8px;text-decoration:none;font-size:.75rem;}
+.nav-btn:hover{color:var(--text);border-color:var(--accent);}
+.container{max-width:1400px;margin:0 auto;padding:28px 32px;}
+.section-title{font-size:.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:28px 0 14px;padding-left:10px;}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
+.mcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;}
+.mcard::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.mcard.red::after{background:var(--red);}.mcard.green::after{background:var(--green);}.mcard.yellow::after{background:var(--yellow);}.mcard.blue::after{background:var(--blue);}.mcard.purple::after{background:var(--purple);}
+.mlabel{font-size:.72rem;color:var(--muted);margin-bottom:6px;font-weight:600;}
+.mvalue{font-size:1.8rem;font-weight:900;line-height:1;}
+.mvalue.red{color:var(--red);}.mvalue.green{color:var(--green);}.mvalue.yellow{color:var(--yellow);}.mvalue.blue{color:var(--blue);}.mvalue.purple{color:var(--purple);}
+.msub{font-size:.72rem;color:var(--muted);margin-top:6px;}
+.msrc{font-size:.65rem;color:#444d56;margin-top:4px;border-top:1px solid var(--border);padding-top:4px;}
+.msrc a{color:#444d56;text-decoration:none;}.msrc a:hover{color:var(--blue);}
+.data-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:24px;}
+.data-table th{background:#1c2333;color:var(--muted);padding:10px 14px;text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.data-table td{padding:11px 14px;border-bottom:1px solid #21262d;vertical-align:top;}
+.data-table tr:hover td{background:#1c2333;}
+.tag{padding:3px 9px;border-radius:8px;font-size:.68rem;font-weight:700;display:inline-block;}
+.tag-bull{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;}
+.tag-bear{background:#2d1b1b;color:var(--red);border:1px solid #5a1d1d;}
+.tag-neut{background:#21262d;color:var(--muted);border:1px solid var(--border);}
+.tag-warn{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+@media(max-width:768px){.two-col{grid-template-columns:1fr;}}
+.verdict-box{border-radius:14px;padding:22px 26px;margin:20px 0;}
+.verdict-box.bull{background:#0d1f0d;border:1px solid #1d5a1d;}
+.verdict-box.bear{background:#1f0d0d;border:1px solid #5a1d1d;}
+.verdict-box.warn{background:#1f1a0d;border:1px solid var(--yellow);}
+.verdict-box.neut{background:#0d1420;border:1px solid var(--blue);}
+.verdict-box h3{font-size:1rem;font-weight:800;margin-bottom:10px;}
+.verdict-box.bull h3{color:var(--green);}.verdict-box.bear h3{color:var(--red);}.verdict-box.warn h3{color:var(--yellow);}.verdict-box.neut h3{color:var(--blue);}
+.verdict-box p{font-size:.82rem;color:var(--muted);line-height:1.7;}
+.bias-box{background:#1c1f26;border:1px solid #3a3f4a;border-radius:12px;padding:16px 20px;margin:20px 0;font-size:.78rem;color:var(--muted);}
+.bias-box h4{color:var(--yellow);margin-bottom:8px;font-size:.8rem;}
+.freshness{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;padding:2px 8px;border-radius:8px;font-weight:600;}
+.fresh{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;}
+.stale-week{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;}
+.stale-old{background:#2d1b1b;color:var(--red);border:1px solid #5a1d1d;}
+.footer{text-align:center;color:var(--muted);font-size:.72rem;padding:20px;border-top:1px solid var(--border);margin-top:24px;}
+.scenario-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px;}
+.prob-bar{background:#21262d;border-radius:8px;height:14px;overflow:hidden;margin:10px 0;}
+.prob-fill{height:100%;border-radius:8px;}
+
+.header{background:linear-gradient(135deg,#0d1a2d,#1a0d2d);border-bottom:3px solid var(--purple);padding:28px 36px;text-align:center;}
+.header h1{font-size:1.9rem;font-weight:900;} .header h1 span{color:var(--purple);}
+.header-meta{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;}
+.badge-date{background:#1a3020;border:1px solid var(--green);color:var(--green);}
+.badge-src{background:#1a2940;border:1px solid var(--blue);color:var(--blue);}
+.badge-warn{background:#2d2b1b;border:1px solid var(--yellow);color:var(--yellow);}
+.section-title{border-left:3px solid var(--purple);}
+.gap-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
+.gap-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.gap-name{font-size:.95rem;font-weight:800;}
+</style></head>
+<body>
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="dashboard_index.html" class="back-btn">← 메인 허브</a>
+    <span class="breadcrumb">대시보드 5 / 8 · 서사 vs 숫자 괴리 분석</span>
+  </div>
+  <div class="nav-btns">
+    <a href="dashboard_4_industry_cycle.html" class="nav-btn">← 산업사이클</a>
+    <a href="dashboard_6_macro_scenarios.html" class="nav-btn">거시시나리오 →</a>
+  </div>
+</div>
+<div class="header">
+  <h1>📰 <span>서사 vs 숫자 괴리 분석</span></h1>
+  <p style="color:var(--muted);font-size:.88rem;margin-top:8px;">시장이 믿는 이야기와 실제 숫자의 차이 | 5단계 분석</p>
+  <div class="header-meta">
+    <span class="badge badge-date">📅 기준일: 2026-02-26</span>
+    <span class="badge badge-src">출처: Bloomberg · S&P · 각사 IR</span>
+    <span class="badge badge-warn">⚠️ 투자 조언 아님</span>
+  </div>
+</div>
+<div class="container">
+  <div class="section-title">🔍 주요 서사-숫자 괴리 분석</div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-name">🤖 AI·반도체 — "AI가 모든 것을 바꾼다"</div>
+      <span class="tag tag-warn">서사 과대, 숫자 지지</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>항목</th><th>시장 서사</th><th>실제 숫자</th><th>괴리</th></tr></thead>
+      <tbody>
+        <tr><td>Nvidia 밸류에이션</td><td>AI 독점 → 무한 성장</td><td>PER 38× · EPS +7%</td><td><span class="tag tag-bear">서사 과대</span></td></tr>
+        <tr><td>KOSPI 반도체</td><td>+82~222% 이익 성장</td><td>HBM 실제 납품 증가 중</td><td><span class="tag tag-bull">숫자가 서사 지지</span></td></tr>
+        <tr><td>시장 KPI</td><td>AI 투자 붐</td><td>KPI +11% vs 시장 +18%</td><td><span class="tag tag-warn">시장 기대 초과</span></td></tr>
+      </tbody>
+    </table>
+    <div class="msrc">출처: Bloomberg · S&P Global · 각사 IR · 2026-02</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-name">🌱 ESG·탈탄소화 — "녹색 혁명이 온다"</div>
+      <span class="tag tag-bear">서사 앞서감, 숫자 지연</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>항목</th><th>시장 서사</th><th>실제 숫자</th><th>괴리</th></tr></thead>
+      <tbody>
+        <tr><td>탄소중립 기업 주가</td><td>ESG 프리미엄 지속</td><td>KPI +11% vs 시장 +18% 지연</td><td><span class="tag tag-bear">서사 > 실적</span></td></tr>
+        <tr><td>신재생에너지 CAPEX</td><td>폭발적 투자</td><td>실적 반영 1~3년 지연</td><td><span class="tag tag-warn">장기 기다림</span></td></tr>
+      </tbody>
+    </table>
+    <div class="msrc">출처: Bloomberg NEF · 2026-02</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-name">👴 고령화 — "실버 경제 성장"</div>
+      <span class="tag tag-bull">서사·숫자 부합</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>항목</th><th>시장 서사</th><th>실제 숫자</th><th>괴리</th></tr></thead>
+      <tbody>
+        <tr><td>헬스케어 수요</td><td>노령화 → 구조적 성장</td><td>EPS +7% · 배당 5.8%</td><td><span class="tag tag-bull">일치</span></td></tr>
+        <tr><td>약가 규제 리스크</td><td>헬스케어 주가 무제한 상승</td><td>약가 규제 과대 평가됨</td><td><span class="tag tag-warn">중간 조율 필요</span></td></tr>
+      </tbody>
+    </table>
+    <div class="msrc">출처: Bloomberg · 증권사 리서치 · 2026-02</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-name">🏦 금융 밸류업 — "은행주 재평가"</div>
+      <span class="tag tag-bull">서사·숫자 강하게 부합</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>항목</th><th>시장 서사</th><th>실제 숫자</th><th>괴리</th></tr></thead>
+      <tbody>
+        <tr><td>KB금융 PBR</td><td>밸류업 정책 → 1× 돌파</td><td>PBR 1× 실제 돌파</td><td><span class="tag tag-bull">일치</span></td></tr>
+        <tr><td>KRX 은행지수</td><td>2026년 대세상승</td><td>2월 +22.5% 실현</td><td><span class="tag tag-bull">숫자가 서사 확인</span></td></tr>
+        <tr><td>배당수익률</td><td>고배당 매력</td><td>5.8% (실제)</td><td><span class="tag tag-bull">일치</span></td></tr>
+      </tbody>
+    </table>
+    <div class="msrc">출처: <a href="https://www.chosun.com/economy/money/2026/02/12/6NAX2TI6PJFP3JVEYVP5ITPK2E/" target="_blank">조선일보</a> · KRX · 2026-02-12</div>
+  </div>
+
+  <div class="bias-box">
+    <h4>⚠️ 분석 한계</h4>
+    <p>서사-숫자 괴리 분석은 주관적 판단 포함. 서사는 시장 심리를 반영하므로 단기 가격 형성에 미치는 영향이 실제 숫자보다 클 수 있음. 괴리가 크다고 해서 즉시 주가 조정이 일어나지 않을 수 있음.</p>
+  </div>
+  <div class="verdict-box warn">
+    <h3>🎯 종합 결론</h3>
+    <p>가장 위험한 괴리: <strong style="color:var(--red);">AI 빅테크 글로벌</strong> (PER 38× vs EPS +7%). 가장 매력적 일치: <strong style="color:var(--green);">금융 밸류업</strong> (서사·숫자 모두 지지). 반도체 KOSPI는 HBM 실적이 서사를 뒷받침 중이나 2027년 DRAM 조정 리스크 선반영 여부 확인 필요.</p>
+  </div>
+</div>
+<div class="footer">
+  📅 마지막 업데이트: 2026-02-26 · 출처: Bloomberg, S&P, KRX, 조선일보 · ⚠️ 투자 조언 아님
+  <br><a href="dashboard_index.html" style="color:var(--blue);text-decoration:none;">← 메인 허브로 돌아가기</a>
+</div>
+</body></html>

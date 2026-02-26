@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🌐 Dashboard 6 — 거시 시나리오 확률 게임</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--green:#3fb950;--yellow:#d29922;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--orange:#f0883e;--accent:#1f6feb;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;}
+.topbar{background:#161b22;border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.back-btn{background:#21262d;border:1px solid var(--border);color:var(--blue);padding:6px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:700;}
+.breadcrumb{font-size:.78rem;color:var(--muted);}
+.nav-btns{display:flex;gap:8px;}
+.nav-btn{background:#21262d;border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:8px;text-decoration:none;font-size:.75rem;}
+.nav-btn:hover{color:var(--text);border-color:var(--accent);}
+.container{max-width:1400px;margin:0 auto;padding:28px 32px;}
+.section-title{font-size:.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:28px 0 14px;padding-left:10px;}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
+.mcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;}
+.mcard::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.mcard.red::after{background:var(--red);}.mcard.green::after{background:var(--green);}.mcard.yellow::after{background:var(--yellow);}.mcard.blue::after{background:var(--blue);}.mcard.purple::after{background:var(--purple);}
+.mlabel{font-size:.72rem;color:var(--muted);margin-bottom:6px;font-weight:600;}
+.mvalue{font-size:1.8rem;font-weight:900;line-height:1;}
+.mvalue.red{color:var(--red);}.mvalue.green{color:var(--green);}.mvalue.yellow{color:var(--yellow);}.mvalue.blue{color:var(--blue);}.mvalue.purple{color:var(--purple);}
+.msub{font-size:.72rem;color:var(--muted);margin-top:6px;}
+.msrc{font-size:.65rem;color:#444d56;margin-top:4px;border-top:1px solid var(--border);padding-top:4px;}
+.msrc a{color:#444d56;text-decoration:none;}.msrc a:hover{color:var(--blue);}
+.data-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:24px;}
+.data-table th{background:#1c2333;color:var(--muted);padding:10px 14px;text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.data-table td{padding:11px 14px;border-bottom:1px solid #21262d;vertical-align:top;}
+.data-table tr:hover td{background:#1c2333;}
+.tag{padding:3px 9px;border-radius:8px;font-size:.68rem;font-weight:700;display:inline-block;}
+.tag-bull{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;}
+.tag-bear{background:#2d1b1b;color:var(--red);border:1px solid #5a1d1d;}
+.tag-neut{background:#21262d;color:var(--muted);border:1px solid var(--border);}
+.tag-warn{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+@media(max-width:768px){.two-col{grid-template-columns:1fr;}}
+.verdict-box{border-radius:14px;padding:22px 26px;margin:20px 0;}
+.verdict-box.bull{background:#0d1f0d;border:1px solid #1d5a1d;}
+.verdict-box.bear{background:#1f0d0d;border:1px solid #5a1d1d;}
+.verdict-box.warn{background:#1f1a0d;border:1px solid var(--yellow);}
+.verdict-box.neut{background:#0d1420;border:1px solid var(--blue);}
+.verdict-box h3{font-size:1rem;font-weight:800;margin-bottom:10px;}
+.verdict-box.bull h3{color:var(--green);}.verdict-box.bear h3{color:var(--red);}.verdict-box.warn h3{color:var(--yellow);}.verdict-box.neut h3{color:var(--blue);}
+.verdict-box p{font-size:.82rem;color:var(--muted);line-height:1.7;}
+.bias-box{background:#1c1f26;border:1px solid #3a3f4a;border-radius:12px;padding:16px 20px;margin:20px 0;font-size:.78rem;color:var(--muted);}
+.bias-box h4{color:var(--yellow);margin-bottom:8px;font-size:.8rem;}
+.freshness{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;padding:2px 8px;border-radius:8px;font-weight:600;}
+.fresh{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;}
+.stale-week{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;}
+.stale-old{background:#2d1b1b;color:var(--red);border:1px solid #5a1d1d;}
+.footer{text-align:center;color:var(--muted);font-size:.72rem;padding:20px;border-top:1px solid var(--border);margin-top:24px;}
+.scenario-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px;}
+.prob-bar{background:#21262d;border-radius:8px;height:14px;overflow:hidden;margin:10px 0;}
+.prob-fill{height:100%;border-radius:8px;}
+
+.header{background:linear-gradient(135deg,#0d1420,#0d2040);border-bottom:3px solid var(--blue);padding:28px 36px;text-align:center;}
+.header h1{font-size:1.9rem;font-weight:900;} .header h1 span{color:var(--blue);}
+.header-meta{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;}
+.badge-date{background:#1a3020;border:1px solid var(--green);color:var(--green);}
+.badge-src{background:#1a2940;border:1px solid var(--blue);color:var(--blue);}
+.badge-warn{background:#2d2b1b;border:1px solid var(--yellow);color:var(--yellow);}
+.section-title{border-left:3px solid var(--blue);}
+</style></head>
+<body>
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="dashboard_index.html" class="back-btn">← 메인 허브</a>
+    <span class="breadcrumb">대시보드 6 / 8 · 거시 시나리오 확률 게임</span>
+  </div>
+  <div class="nav-btns">
+    <a href="dashboard_5_narrative_vs_numbers.html" class="nav-btn">← 서사vs숫자</a>
+    <a href="dashboard_7_bankruptcy_risk.html" class="nav-btn">파산위험 →</a>
+  </div>
+</div>
+<div class="header">
+  <h1>🌐 <span>거시 시나리오 확률 게임</span></h1>
+  <p style="color:var(--muted);font-size:.88rem;margin-top:8px;">2026~2027 시장 시나리오 확률 분석 | 6단계</p>
+  <div class="header-meta">
+    <span class="badge badge-date">📅 전망 기준: 2026-02 → 2027-02</span>
+    <span class="badge badge-src">출처: IMF · Fed · Bloomberg · BOK</span>
+    <span class="badge badge-warn">⚠️ 전망치 · 투자 조언 아님</span>
+  </div>
+</div>
+<div class="container">
+
+  <div class="section-title">📊 현재 거시 핵심 지표</div>
+  <div class="metric-grid">
+    <div class="mcard yellow">
+      <div class="mlabel">미국 GDP 성장률 전망</div>
+      <div class="mvalue yellow">1.8~2.2%</div>
+      <div class="msub">2026년 기본 시나리오</div>
+      <div class="msrc"><span class="freshness stale-week">🟡 분기</span> 출처: <a href="https://www.imf.org" target="_blank">IMF WEO</a> · 2026-01</div>
+    </div>
+    <div class="mcard yellow">
+      <div class="mlabel">미국 인플레이션 전망</div>
+      <div class="mvalue yellow">2.0~2.3%</div>
+      <div class="msub">목표 2%에 근접</div>
+      <div class="msrc"><span class="freshness stale-week">🟡 월간</span> 출처: <a href="https://www.bls.gov" target="_blank">BLS CPI</a> · 2026-01</div>
+    </div>
+    <div class="mcard blue">
+      <div class="mlabel">Fed 금리 인하 전망</div>
+      <div class="mvalue blue">-50~75bp</div>
+      <div class="msub">2026년 중 점진적 인하</div>
+      <div class="msrc"><span class="freshness stale-week">🟡 분기</span> 출처: <a href="https://www.federalreserve.gov" target="_blank">Fed 점도표</a> · 2025-12</div>
+    </div>
+    <div class="mcard yellow">
+      <div class="mlabel">미국 실업률 전망</div>
+      <div class="mvalue yellow">4.3~4.7%</div>
+      <div class="msub">연말 기준</div>
+      <div class="msrc"><span class="freshness stale-week">🟡 월간</span> 출처: <a href="https://www.bls.gov" target="_blank">BLS</a> · 2026-01</div>
+    </div>
+    <div class="mcard green">
+      <div class="mlabel">한국 기준금리</div>
+      <div class="mvalue green">2.50%</div>
+      <div class="msub">6회 연속 동결 (2026-02-26)</div>
+      <div class="msrc"><span class="freshness fresh">🟢 확인</span> 출처: <a href="https://www.bok.or.kr" target="_blank">한국은행</a></div>
+    </div>
+  </div>
+
+  <div class="section-title">🎲 3대 시나리오 확률 분석</div>
+
+  <div class="scenario-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:1rem;font-weight:800;color:var(--green);">✅ 시나리오 A: 소프트랜딩 (기본)</div>
+      <span class="tag tag-bull">확률 40%</span>
+    </div>
+    <div class="prob-bar"><div class="prob-fill" style="width:40%;background:var(--green);"></div></div>
+    <table class="data-table">
+      <thead><tr><th>지표</th><th>범위</th><th>시사점</th></tr></thead>
+      <tbody>
+        <tr><td>GDP 성장률</td><td>1.8~2.2%</td><td>안정적 성장 지속</td></tr>
+        <tr><td>인플레이션</td><td>2.0~2.3%</td><td>목표 근접, 인하 여건 조성</td></tr>
+        <tr><td>금리 인하</td><td>-50~75bp</td><td>점진적 완화 → 주식 우호</td></tr>
+        <tr><td>KOSPI 방향</td><td>+10~15%</td><td>상방 유지</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px;background:#0d1f0d;border-radius:8px;font-size:.8rem;color:var(--muted);">
+      <strong style="color:var(--green);">자산 배분:</strong> 국내주식 35% · 해외AI/테크 30% · 장기채 15% · 리츠 10% · 현금 10%
+    </div>
+    <div class="msrc">출처: IMF WEO · Fed 점도표 · Bloomberg · 2026-02</div>
+  </div>
+
+  <div class="scenario-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:1rem;font-weight:800;color:var(--yellow);">⚠️ 시나리오 B: 스태그플레이션</div>
+      <span class="tag tag-warn">확률 25%</span>
+    </div>
+    <div class="prob-bar"><div class="prob-fill" style="width:25%;background:var(--yellow);"></div></div>
+    <table class="data-table">
+      <thead><tr><th>지표</th><th>범위</th><th>시사점</th></tr></thead>
+      <tbody>
+        <tr><td>GDP 성장률</td><td>1.0~1.5%</td><td>성장 둔화</td></tr>
+        <tr><td>인플레이션</td><td>3.0~4.0%</td><td>고물가 지속</td></tr>
+        <tr><td>금리</td><td>동결/인상</td><td>주식·채권 동반 압박</td></tr>
+        <tr><td>KOSPI 방향</td><td>-15~25%</td><td>하방 압력</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px;background:#1f1a0d;border-radius:8px;font-size:.8rem;color:var(--muted);">
+      <strong style="color:var(--yellow);">자산 배분:</strong> 현금 30% · 원자재 25% · 인플레 연동채 20% · 배당주 15% · 주식 10%
+    </div>
+    <div class="msrc">출처: IMF · Bloomberg · 2026-02</div>
+  </div>
+
+  <div class="scenario-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:1rem;font-weight:800;color:var(--blue);">🚀 시나리오 C: 급격 회복</div>
+      <span class="tag tag-bull">확률 15~25%</span>
+    </div>
+    <div class="prob-bar"><div class="prob-fill" style="width:20%;background:var(--blue);"></div></div>
+    <table class="data-table">
+      <thead><tr><th>지표</th><th>범위</th><th>시사점</th></tr></thead>
+      <tbody>
+        <tr><td>GDP 성장률</td><td>2.5~3.5%</td><td>예상 상회</td></tr>
+        <tr><td>인플레이션</td><td>1.5~2.0%</td><td>목표 이하</td></tr>
+        <tr><td>금리 인하</td><td>-100bp+</td><td>적극 완화</td></tr>
+        <tr><td>KOSPI 방향</td><td>+20~35%</td><td>강한 상방</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px;background:#0d1420;border-radius:8px;font-size:.8rem;color:var(--muted);">
+      <strong style="color:var(--blue);">자산 배분:</strong> 주식 70% (성장주 집중) · 채권 20% · 현금 10%
+    </div>
+    <div class="msrc">출처: Bloomberg · 증권사 강세 전망 · 2026-02</div>
+  </div>
+
+  <div class="scenario-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:1rem;font-weight:800;color:var(--red);">💥 시나리오 D: 경기침체</div>
+      <span class="tag tag-bear">확률 15%</span>
+    </div>
+    <div class="prob-bar"><div class="prob-fill" style="width:15%;background:var(--red);"></div></div>
+    <table class="data-table">
+      <thead><tr><th>지표</th><th>범위</th><th>시사점</th></tr></thead>
+      <tbody>
+        <tr><td>GDP 성장률</td><td>-0.5~0.5%</td><td>침체 진입</td></tr>
+        <tr><td>실업률</td><td>5.5~6.5%</td><td>고용 악화</td></tr>
+        <tr><td>KOSPI 방향</td><td>-30~40%</td><td>강한 하방</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px;background:#1f0d0d;border-radius:8px;font-size:.8rem;color:var(--muted);">
+      <strong style="color:var(--red);">자산 배분:</strong> 현금 50% · 국채 30% · 금 10% · 방어주 10%
+    </div>
+    <div class="msrc">출처: 침체 모델 · Bloomberg · 2026-02</div>
+  </div>
+
+  <div class="bias-box">
+    <h4>⚠️ 분석 한계</h4>
+    <p>시나리오 확률은 당사 주관 추정치이며 Bloomberg·IMF·Fed 전망 종합 기반. 실제 결과와 큰 차이 발생 가능. 지정학적 돌발 변수(전쟁, 팬데믹 등) 미반영.</p>
+  </div>
+  <div class="verdict-box neut">
+    <h3>🎯 종합 결론</h3>
+    <p>기본 시나리오(A, 40%)가 가장 높은 확률. 스태그플레이션(B, 25%)이 두 번째 위협. 두 시나리오 합산 65% 가능성으로 <strong style="color:var(--blue);">분산 투자와 헤지 전략 필수</strong>. 완전 주식 집중 또는 완전 현금화 모두 비권장.</p>
+  </div>
+</div>
+<div class="footer">
+  📅 마지막 업데이트: 2026-02-26 · 출처: IMF WEO, Fed, Bloomberg, BOK · ⚠️ 투자 조언 아님
+  <br><a href="dashboard_index.html" style="color:var(--blue);text-decoration:none;">← 메인 허브로 돌아가기</a>
+</div>
+</body></html>
