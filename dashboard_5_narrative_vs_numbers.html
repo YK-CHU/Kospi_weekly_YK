@@ -1,167 +1,152 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>📰 Dashboard 5 — 서사 vs 숫자 괴리 분석</title>
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--green:#3fb950;--yellow:#d29922;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--orange:#f0883e;--accent:#1f6feb;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;}
-.topbar{background:#161b22;border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.back-btn{background:#21262d;border:1px solid var(--border);color:var(--blue);padding:6px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:700;}
-.breadcrumb{font-size:.78rem;color:var(--muted);}
-.nav-btns{display:flex;gap:8px;}
-.nav-btn{background:#21262d;border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:8px;text-decoration:none;font-size:.75rem;}
-.nav-btn:hover{color:var(--text);border-color:var(--accent);}
-.container{max-width:1400px;margin:0 auto;padding:28px 32px;}
-.section-title{font-size:.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:28px 0 14px;padding-left:10px;}
-.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
-.mcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;}
-.mcard::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.mcard.red::after{background:var(--red);}.mcard.green::after{background:var(--green);}.mcard.yellow::after{background:var(--yellow);}.mcard.blue::after{background:var(--blue);}.mcard.purple::after{background:var(--purple);}
-.mlabel{font-size:.72rem;color:var(--muted);margin-bottom:6px;font-weight:600;}
-.mvalue{font-size:1.8rem;font-weight:900;line-height:1;}
-.mvalue.red{color:var(--red);}.mvalue.green{color:var(--green);}.mvalue.yellow{color:var(--yellow);}.mvalue.blue{color:var(--blue);}.mvalue.purple{color:var(--purple);}
-.msub{font-size:.72rem;color:var(--muted);margin-top:6px;}
-.msrc{font-size:.65rem;color:#444d56;margin-top:4px;border-top:1px solid var(--border);padding-top:4px;}
-.msrc a{color:#444d56;text-decoration:none;}.msrc a:hover{color:var(--blue);}
-.data-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:24px;}
-.data-table th{background:#1c2333;color:var(--muted);padding:10px 14px;text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;border-bottom:1px solid var(--border);}
-.data-table td{padding:11px 14px;border-bottom:1px solid #21262d;vertical-align:top;}
-.data-table tr:hover td{background:#1c2333;}
-.tag{padding:3px 9px;border-radius:8px;font-size:.68rem;font-weight:700;display:inline-block;}
-.tag-bull{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;}
-.tag-bear{background:#2d1b1b;color:var(--red);border:1px solid #5a1d1d;}
-.tag-neut{background:#21262d;color:var(--muted);border:1px solid var(--border);}
-.tag-warn{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
-@media(max-width:768px){.two-col{grid-template-columns:1fr;}}
-.verdict-box{border-radius:14px;padding:22px 26px;margin:20px 0;}
-.verdict-box.bull{background:#0d1f0d;border:1px solid #1d5a1d;}
-.verdict-box.bear{background:#1f0d0d;border:1px solid #5a1d1d;}
-.verdict-box.warn{background:#1f1a0d;border:1px solid var(--yellow);}
-.verdict-box.neut{background:#0d1420;border:1px solid var(--blue);}
-.verdict-box h3{font-size:1rem;font-weight:800;margin-bottom:10px;}
-.verdict-box.bull h3{color:var(--green);}.verdict-box.bear h3{color:var(--red);}.verdict-box.warn h3{color:var(--yellow);}.verdict-box.neut h3{color:var(--blue);}
-.verdict-box p{font-size:.82rem;color:var(--muted);line-height:1.7;}
-.bias-box{background:#1c1f26;border:1px solid #3a3f4a;border-radius:12px;padding:16px 20px;margin:20px 0;font-size:.78rem;color:var(--muted);}
-.bias-box h4{color:var(--yellow);margin-bottom:8px;font-size:.8rem;}
-.freshness{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;padding:2px 8px;border-radius:8px;font-weight:600;}
-.fresh{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;}
-.stale-week{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;}
-.stale-old{background:#2d1b1b;color:var(--red);border:1px solid #5a1d1d;}
-.footer{text-align:center;color:var(--muted);font-size:.72rem;padding:20px;border-top:1px solid var(--border);margin-top:24px;}
-.scenario-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px;}
-.prob-bar{background:#21262d;border-radius:8px;height:14px;overflow:hidden;margin:10px 0;}
-.prob-fill{height:100%;border-radius:8px;}
-
-.header{background:linear-gradient(135deg,#0d1a2d,#1a0d2d);border-bottom:3px solid var(--purple);padding:28px 36px;text-align:center;}
-.header h1{font-size:1.9rem;font-weight:900;} .header h1 span{color:var(--purple);}
-.header-meta{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
-.badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;}
-.badge-date{background:#1a3020;border:1px solid var(--green);color:var(--green);}
-.badge-src{background:#1a2940;border:1px solid var(--blue);color:var(--blue);}
-.badge-warn{background:#2d2b1b;border:1px solid var(--yellow);color:var(--yellow);}
-.section-title{border-left:3px solid var(--purple);}
-.gap-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
-.gap-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
-.gap-name{font-size:.95rem;font-weight:800;}
-</style></head>
+  :root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;
+        --muted:#8b949e;--green:#3fb950;--red:#f85149;--yellow:#d29922;
+        --blue:#58a6ff;--purple:#bc8cff;--accent:#1f6feb;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;
+       font-size:16px;line-height:1.6;padding:12px;}
+  h1{font-size:clamp(1.4rem,4vw,2rem);margin-bottom:8px;}
+  h2{font-size:clamp(1.1rem,3vw,1.4rem);margin:20px 0 10px;color:var(--blue);}
+  h3{font-size:clamp(0.95rem,2.5vw,1.15rem);margin:12px 0 6px;color:var(--yellow);}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;
+        padding:16px;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;
+         font-weight:600;margin:2px;}
+  .green{color:var(--green);} .red{color:var(--red);} .yellow{color:var(--yellow);}
+  .blue{color:var(--blue);} .purple{color:var(--purple);}
+  .big-num{font-size:clamp(1.5rem,5vw,2.4rem);font-weight:700;}
+  .sub{font-size:0.85rem;color:var(--muted);}
+  .tag-g{background:#1a3d1a;color:var(--green);border:1px solid var(--green);}
+  .tag-r{background:#3d1a1a;color:var(--red);border:1px solid var(--red);}
+  .tag-y{background:#3d3200;color:var(--yellow);border:1px solid var(--yellow);}
+  .tag-b{background:#0d2b4a;color:var(--blue);border:1px solid var(--blue);}
+  table{width:100%;border-collapse:collapse;font-size:0.9rem;}
+  th{background:#1c2128;padding:8px 10px;text-align:left;color:var(--muted);}
+  td{padding:8px 10px;border-bottom:1px solid var(--border);}
+  .nav-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;
+             border-radius:6px;text-decoration:none;font-size:0.85rem;font-weight:600;}
+  .nav-bar a:hover{opacity:0.85;}
+  .note{font-size:0.78rem;color:var(--muted);margin-top:4px;}
+  .stock-row{display:flex;justify-content:space-between;align-items:center;
+             padding:6px 0;border-bottom:1px solid var(--border);}
+  .stock-name{font-weight:600;}
+  .stock-price{font-size:1.05rem;font-weight:700;}
+  @media(max-width:480px){body{font-size:15px;padding:8px;}
+    th,td{padding:6px 8px;}.nav-bar a{font-size:0.8rem;padding:6px 10px;}}
+</style>
+<title>D5 내러티브</title></head>
 <body>
-<div class="topbar">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <a href="dashboard_index.html" class="back-btn">← 메인 허브</a>
-    <span class="breadcrumb">대시보드 5 / 8 · 서사 vs 숫자 괴리 분석</span>
+<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_1_liquidity.html">1️⃣ 유동성</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_3_supply_demand.html">3️⃣ 수급</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_6_macro_scenarios.html">6️⃣ 매크로</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 중립분석</a></nav>
+
+<header style="margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 26일 (목) 기준 | 최종 업데이트: 2026-02-26</div>
+  <h1>📖 5단계: 내러티브 vs 숫자 정합성 검증기</h1>
+  <div style="color:var(--muted);font-size:0.95rem;">시장 스토리와 실제 실적의 일치 여부 분석 — 2026년 2월</div>
+</header>
+
+<h2>🌟 이번 주 최대 이벤트: 엔비디아 Q4 실적</h2>
+<div class="grid">
+  
+<div class="card">
+  <div class="sub">매출 (Q4 FY2026) <span class="badge tag-g">어닝 서프라이즈</span></div>
+  <div class="big-num" style="color:var(--green);">$68.1<span style="font-size:1rem;"> B</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">컨센서스 $65.6B 상회</span></div>
+  <div class="note">2026-02-26 새벽 발표</div>
+</div>
+  
+<div class="card">
+  <div class="sub">EPS (주당순이익) <span class="badge tag-g">상회</span></div>
+  <div class="big-num" style="color:var(--green);">$1.62<span style="font-size:1rem;"> </span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">예상 $1.52 대비 +6.58%</span></div>
+  <div class="note">데이터센터 매출 $62.3B</div>
+</div>
+  
+<div class="card">
+  <div class="sub">Q1 FY2027 가이던스 <span class="badge tag-g">강세 전망</span></div>
+  <div class="big-num" style="color:var(--green);">~$43<span style="font-size:1rem;"> B</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">컨센서스 $41.8B 상회</span></div>
+  <div class="note">연간 성장 지속</div>
+</div>
+  
+<div class="card">
+  <div class="sub">전년 동기 대비 성장 <span class="badge tag-g">YoY</span></div>
+  <div class="big-num" style="color:var(--green);">+73<span style="font-size:1rem;"> %</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">Q4 FY25: $39.3B</span></div>
+  <div class="note">AI 수요 폭증 현실화</div>
+</div>
+</div>
+
+<h2>🔍 내러티브 vs 숫자 정합성 분석</h2>
+<div class="grid">
+  <div class="card" style="border-color:var(--green);">
+    <h3>✅ 정합성 높음 (내러티브 = 실적)</h3>
+    <div style="margin:8px 0;"><strong>반도체 AI 사이클</strong> — NVIDIA +73% YoY, SK하이닉스 영업이익 2026년 100조+ 추정</div>
+    <div style="margin:8px 0;"><strong>방산 수출 슈퍼사이클</strong> — 실제 수주 사상 최대, 실적 반영 시작</div>
+    <div style="margin:8px 0;"><strong>자동차 글로벌 확장</strong> — 현대차·기아 실적 컨센 상향, 주가 급등 정당화</div>
+    <div style="margin:8px 0;"><strong>KOSPI 이익 급증</strong> — 2026년 컨센서스 580조 (연초 대비 +35%)</div>
   </div>
-  <div class="nav-btns">
-    <a href="dashboard_4_industry_cycle.html" class="nav-btn">← 산업사이클</a>
-    <a href="dashboard_6_macro_scenarios.html" class="nav-btn">거시시나리오 →</a>
+  <div class="card" style="border-color:var(--red);">
+    <h3>⚠️ 괴리 주의 (내러티브 > 실적)</h3>
+    <div style="margin:8px 0;"><strong>카카오 AI 전환</strong> — AI 내러티브 강조 vs 실제 이익 개선 더딤</div>
+    <div style="margin:8px 0;"><strong>원전 단기 급등</strong> — 수주 기대감 선반영, 실제 착공은 수년 후</div>
+    <div style="margin:8px 0;"><strong>개인 신용잔고</strong> — 32조원 사상 최고 — 레버리지 버블 신호</div>
+    <div style="margin:8px 0;"><strong>KOSPI 7,000~8,000 전망</strong> — 증권사 낙관론 vs 외국인 14조 매도</div>
   </div>
 </div>
-<div class="header">
-  <h1>📰 <span>서사 vs 숫자 괴리 분석</span></h1>
-  <p style="color:var(--muted);font-size:.88rem;margin-top:8px;">시장이 믿는 이야기와 실제 숫자의 차이 | 5단계 분석</p>
-  <div class="header-meta">
-    <span class="badge badge-date">📅 기준일: 2026-02-26</span>
-    <span class="badge badge-src">출처: Bloomberg · S&P · 각사 IR</span>
-    <span class="badge badge-warn">⚠️ 투자 조언 아님</span>
+
+<h2>📊 KOSPI 랠리 정당화 가능한가?</h2>
+<div class="grid">
+  <div class="card" style="background:#0d2b4a;">
+    <h3>📌 Bull Case (강세 논거)</h3>
+    <p>• 12M PER 10.1배 → 이익 증가 감안 시 7,000도 저평가 가능</p>
+    <p>• 삼성·하이닉스 2개 종목이 코스피 상승의 66% 견인</p>
+    <p>• 글로벌 자금 이머징→韓 집중 유입 (EWY +39% YTD)</p>
+    <p>• AI 빅사이클이 주도 → 세계 최상위 수익률</p>
+  </div>
+  <div class="card" style="background:#3d1a1a;">
+    <h3>⚠️ Bear Case (주의 논거)</h3>
+    <p>• 신용잔고 32조원 사상 최고 — 과열 신호</p>
+    <p>• 외국인 14조 매도 지속 — 7,000 고지 장벽</p>
+    <p>• VKOSPI 49.57 — 공포지수 여전히 높음</p>
+    <p>• 미 Fed 금리 3.75%, 고금리 유지 중</p>
   </div>
 </div>
-<div class="container">
-  <div class="section-title">🔍 주요 서사-숫자 괴리 분석</div>
 
-  <div class="gap-card">
-    <div class="gap-header">
-      <div class="gap-name">🤖 AI·반도체 — "AI가 모든 것을 바꾼다"</div>
-      <span class="tag tag-warn">서사 과대, 숫자 지지</span>
-    </div>
-    <table class="data-table">
-      <thead><tr><th>항목</th><th>시장 서사</th><th>실제 숫자</th><th>괴리</th></tr></thead>
-      <tbody>
-        <tr><td>Nvidia 밸류에이션</td><td>AI 독점 → 무한 성장</td><td>PER 38× · EPS +7%</td><td><span class="tag tag-bear">서사 과대</span></td></tr>
-        <tr><td>KOSPI 반도체</td><td>+82~222% 이익 성장</td><td>HBM 실제 납품 증가 중</td><td><span class="tag tag-bull">숫자가 서사 지지</span></td></tr>
-        <tr><td>시장 KPI</td><td>AI 투자 붐</td><td>KPI +11% vs 시장 +18%</td><td><span class="tag tag-warn">시장 기대 초과</span></td></tr>
-      </tbody>
-    </table>
-    <div class="msrc">출처: Bloomberg · S&P Global · 각사 IR · 2026-02</div>
-  </div>
 
-  <div class="gap-card">
-    <div class="gap-header">
-      <div class="gap-name">🌱 ESG·탈탄소화 — "녹색 혁명이 온다"</div>
-      <span class="tag tag-bear">서사 앞서감, 숫자 지연</span>
-    </div>
-    <table class="data-table">
-      <thead><tr><th>항목</th><th>시장 서사</th><th>실제 숫자</th><th>괴리</th></tr></thead>
-      <tbody>
-        <tr><td>탄소중립 기업 주가</td><td>ESG 프리미엄 지속</td><td>KPI +11% vs 시장 +18% 지연</td><td><span class="tag tag-bear">서사 > 실적</span></td></tr>
-        <tr><td>신재생에너지 CAPEX</td><td>폭발적 투자</td><td>실적 반영 1~3년 지연</td><td><span class="tag tag-warn">장기 기다림</span></td></tr>
-      </tbody>
-    </table>
-    <div class="msrc">출처: Bloomberg NEF · 2026-02</div>
-  </div>
-
-  <div class="gap-card">
-    <div class="gap-header">
-      <div class="gap-name">👴 고령화 — "실버 경제 성장"</div>
-      <span class="tag tag-bull">서사·숫자 부합</span>
-    </div>
-    <table class="data-table">
-      <thead><tr><th>항목</th><th>시장 서사</th><th>실제 숫자</th><th>괴리</th></tr></thead>
-      <tbody>
-        <tr><td>헬스케어 수요</td><td>노령화 → 구조적 성장</td><td>EPS +7% · 배당 5.8%</td><td><span class="tag tag-bull">일치</span></td></tr>
-        <tr><td>약가 규제 리스크</td><td>헬스케어 주가 무제한 상승</td><td>약가 규제 과대 평가됨</td><td><span class="tag tag-warn">중간 조율 필요</span></td></tr>
-      </tbody>
-    </table>
-    <div class="msrc">출처: Bloomberg · 증권사 리서치 · 2026-02</div>
-  </div>
-
-  <div class="gap-card">
-    <div class="gap-header">
-      <div class="gap-name">🏦 금융 밸류업 — "은행주 재평가"</div>
-      <span class="tag tag-bull">서사·숫자 강하게 부합</span>
-    </div>
-    <table class="data-table">
-      <thead><tr><th>항목</th><th>시장 서사</th><th>실제 숫자</th><th>괴리</th></tr></thead>
-      <tbody>
-        <tr><td>KB금융 PBR</td><td>밸류업 정책 → 1× 돌파</td><td>PBR 1× 실제 돌파</td><td><span class="tag tag-bull">일치</span></td></tr>
-        <tr><td>KRX 은행지수</td><td>2026년 대세상승</td><td>2월 +22.5% 실현</td><td><span class="tag tag-bull">숫자가 서사 확인</span></td></tr>
-        <tr><td>배당수익률</td><td>고배당 매력</td><td>5.8% (실제)</td><td><span class="tag tag-bull">일치</span></td></tr>
-      </tbody>
-    </table>
-    <div class="msrc">출처: <a href="https://www.chosun.com/economy/money/2026/02/12/6NAX2TI6PJFP3JVEYVP5ITPK2E/" target="_blank">조선일보</a> · KRX · 2026-02-12</div>
-  </div>
-
-  <div class="bias-box">
-    <h4>⚠️ 분석 한계</h4>
-    <p>서사-숫자 괴리 분석은 주관적 판단 포함. 서사는 시장 심리를 반영하므로 단기 가격 형성에 미치는 영향이 실제 숫자보다 클 수 있음. 괴리가 크다고 해서 즉시 주가 조정이 일어나지 않을 수 있음.</p>
-  </div>
-  <div class="verdict-box warn">
-    <h3>🎯 종합 결론</h3>
-    <p>가장 위험한 괴리: <strong style="color:var(--red);">AI 빅테크 글로벌</strong> (PER 38× vs EPS +7%). 가장 매력적 일치: <strong style="color:var(--green);">금융 밸류업</strong> (서사·숫자 모두 지지). 반도체 KOSPI는 HBM 실적이 서사를 뒷받침 중이나 2027년 DRAM 조정 리스크 선반영 여부 확인 필요.</p>
-  </div>
+<div class="card" style="margin-top:16px;">
+  <h3>📌 내러티브 vs 숫자 주목 종목</h3>
+  <table>
+    <tr><th>종목명</th><th>주가</th><th>등락</th><th>투자포인트</th></tr>
+    <tr>
+          <td><strong>NVIDIA</strong><br><span class="sub">NVDA(NASDAQ)</span></td>
+          <td style="font-weight:700;">$131 내외</td>
+          <td style="color:var(--green);font-weight:600;">+0.7%</td>
+          <td class="sub">Q4 FY26 매출 $68.1B, EPS $1.62 예상 상회</td>
+        </tr><tr>
+          <td><strong>삼성전자</strong><br><span class="sub">005930</span></td>
+          <td style="font-weight:700;">~178,600원</td>
+          <td style="color:var(--green);font-weight:600;">+6.0%</td>
+          <td class="sub">HBM 공급 확대, 내러티브와 실적 모두 강함</td>
+        </tr><tr>
+          <td><strong>SK하이닉스</strong><br><span class="sub">000660</span></td>
+          <td style="font-weight:700;">~888,000원</td>
+          <td style="color:var(--green);font-weight:600;">+강세</td>
+          <td class="sub">HBM 영업이익 2026년 100조+ 추정</td>
+        </tr><tr>
+          <td><strong>카카오</strong><br><span class="sub">035720</span></td>
+          <td style="font-weight:700;">~65,000원</td>
+          <td style="color:var(--muted);font-weight:600;">—</td>
+          <td class="sub">AI 전환 내러티브 vs 실적 부진 괴리</td>
+        </tr><tr>
+          <td><strong>한화에어로스페이스</strong><br><span class="sub">012450</span></td>
+          <td style="font-weight:700;">~750,000원</td>
+          <td style="color:var(--green);font-weight:600;">+상승</td>
+          <td class="sub">방산 내러티브 + 실적 모두 강함</td>
+        </tr>
+  </table>
+  <div class="note">⚠️ 주가는 참고용 추정치. 투자 전 직접 확인 필요. 출처: 증권사 리포트 / 2026-02-26</div>
 </div>
-<div class="footer">
-  📅 마지막 업데이트: 2026-02-26 · 출처: Bloomberg, S&P, KRX, 조선일보 · ⚠️ 투자 조언 아님
-  <br><a href="dashboard_index.html" style="color:var(--blue);text-decoration:none;">← 메인 허브로 돌아가기</a>
-</div>
+<div class="note" style="margin-top:12px;">출처: 인베스팅닷컴(NVIDIA), 연합뉴스, 한겨레, 브런치, 키움증권 | 기준일: 2026-02-26</div>
 </body></html>

@@ -1,281 +1,172 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
+<html lang="ko"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💧 Dashboard 1 — 유동성 방향 감지 엔진</title>
 <style>
-:root{
-  --bg:#0d1117;--card:#161b22;--border:#30363d;
-  --text:#e6edf3;--muted:#8b949e;
-  --green:#3fb950;--yellow:#d29922;--red:#f85149;
-  --blue:#58a6ff;--purple:#bc8cff;--orange:#f0883e;
-  --accent:#1f6feb;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;}
-.topbar{background:#161b22;border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.topbar-left{display:flex;align-items:center;gap:12px;}
-.back-btn{background:#21262d;border:1px solid var(--border);color:var(--blue);padding:6px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:700;}
-.back-btn:hover{background:var(--accent);color:#fff;}
-.breadcrumb{font-size:.78rem;color:var(--muted);}
-.nav-btns{display:flex;gap:8px;}
-.nav-btn{background:#21262d;border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:8px;text-decoration:none;font-size:.75rem;}
-.nav-btn:hover{color:var(--text);border-color:var(--accent);}
-.header{background:linear-gradient(135deg,#0d2137,#112a4a);border-bottom:3px solid var(--blue);padding:28px 36px;text-align:center;}
-.header h1{font-size:1.9rem;font-weight:900;letter-spacing:-.02em;}
-.header h1 span{color:var(--blue);}
-.header-meta{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
-.badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;display:inline-flex;align-items:center;gap:5px;}
-.badge-date{background:#1a3020;border:1px solid var(--green);color:var(--green);}
-.badge-src{background:#1a2940;border:1px solid var(--blue);color:var(--blue);}
-.badge-warn{background:#2d2b1b;border:1px solid var(--yellow);color:var(--yellow);}
-.container{max-width:1400px;margin:0 auto;padding:28px 32px;}
-.section-title{font-size:.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:28px 0 14px;border-left:3px solid var(--accent);padding-left:10px;}
-.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:24px;}
-.mcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;}
-.mcard::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.mcard.green::after{background:var(--green);}
-.mcard.yellow::after{background:var(--yellow);}
-.mcard.red::after{background:var(--red);}
-.mcard.blue::after{background:var(--blue);}
-.mcard.neutral::after{background:var(--muted);}
-.mlabel{font-size:.72rem;color:var(--muted);margin-bottom:6px;font-weight:600;}
-.mvalue{font-size:1.8rem;font-weight:900;line-height:1;}
-.mvalue.green{color:var(--green);}
-.mvalue.yellow{color:var(--yellow);}
-.mvalue.red{color:var(--red);}
-.mvalue.blue{color:var(--blue);}
-.msub{font-size:.72rem;color:var(--muted);margin-top:6px;}
-.msrc{font-size:.65rem;color:#444d56;margin-top:4px;border-top:1px solid var(--border);padding-top:4px;}
-.msrc a{color:#444d56;text-decoration:none;}
-.msrc a:hover{color:var(--blue);}
-.data-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:24px;}
-.data-table th{background:#1c2333;color:var(--muted);padding:10px 14px;text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);}
-.data-table td{padding:11px 14px;border-bottom:1px solid #21262d;vertical-align:top;}
-.data-table tr:hover td{background:#1c2333;}
-.tag{padding:3px 9px;border-radius:8px;font-size:.68rem;font-weight:700;display:inline-block;}
-.tag-bull{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;}
-.tag-bear{background:#2d1b1b;color:var(--red);border:1px solid #5a1d1d;}
-.tag-neut{background:#21262d;color:var(--muted);border:1px solid var(--border);}
-.tag-warn{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;}
-.verdict-box{border-radius:14px;padding:22px 26px;margin:20px 0;}
-.verdict-box.bull{background:#0d1f0d;border:1px solid #1d5a1d;}
-.verdict-box.bear{background:#1f0d0d;border:1px solid #5a1d1d;}
-.verdict-box.neut{background:#1a1f2e;border:1px solid var(--border);}
-.verdict-box h3{font-size:1rem;font-weight:800;margin-bottom:10px;}
-.verdict-box.bull h3{color:var(--green);}
-.verdict-box.bear h3{color:var(--red);}
-.verdict-box.neut h3{color:var(--blue);}
-.verdict-box p{font-size:.82rem;color:var(--muted);line-height:1.7;}
-.bias-box{background:#1c1f26;border:1px solid #3a3f4a;border-radius:12px;padding:16px 20px;margin:20px 0;font-size:.78rem;color:var(--muted);}
-.bias-box h4{color:var(--yellow);margin-bottom:8px;font-size:.8rem;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
-@media(max-width:768px){.two-col{grid-template-columns:1fr;}.metric-grid{grid-template-columns:1fr 1fr;}}
-.footer{text-align:center;color:var(--muted);font-size:.72rem;padding:20px;border-top:1px solid var(--border);margin-top:24px;}
-.freshness{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;padding:2px 8px;border-radius:8px;font-weight:600;}
-.fresh{background:#1b2d1b;color:var(--green);border:1px solid #1d5a1d;}
-.stale-week{background:#2d2b1b;color:var(--yellow);border:1px solid #5a4d1d;}
-.stale-old{background:#2d1b1b;color:var(--red);border:1px solid #5a1d1d;}
+  :root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;
+        --muted:#8b949e;--green:#3fb950;--red:#f85149;--yellow:#d29922;
+        --blue:#58a6ff;--purple:#bc8cff;--accent:#1f6feb;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;
+       font-size:16px;line-height:1.6;padding:12px;}
+  h1{font-size:clamp(1.4rem,4vw,2rem);margin-bottom:8px;}
+  h2{font-size:clamp(1.1rem,3vw,1.4rem);margin:20px 0 10px;color:var(--blue);}
+  h3{font-size:clamp(0.95rem,2.5vw,1.15rem);margin:12px 0 6px;color:var(--yellow);}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;
+        padding:16px;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;
+         font-weight:600;margin:2px;}
+  .green{color:var(--green);} .red{color:var(--red);} .yellow{color:var(--yellow);}
+  .blue{color:var(--blue);} .purple{color:var(--purple);}
+  .big-num{font-size:clamp(1.5rem,5vw,2.4rem);font-weight:700;}
+  .sub{font-size:0.85rem;color:var(--muted);}
+  .tag-g{background:#1a3d1a;color:var(--green);border:1px solid var(--green);}
+  .tag-r{background:#3d1a1a;color:var(--red);border:1px solid var(--red);}
+  .tag-y{background:#3d3200;color:var(--yellow);border:1px solid var(--yellow);}
+  .tag-b{background:#0d2b4a;color:var(--blue);border:1px solid var(--blue);}
+  table{width:100%;border-collapse:collapse;font-size:0.9rem;}
+  th{background:#1c2128;padding:8px 10px;text-align:left;color:var(--muted);}
+  td{padding:8px 10px;border-bottom:1px solid var(--border);}
+  .nav-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;
+             border-radius:6px;text-decoration:none;font-size:0.85rem;font-weight:600;}
+  .nav-bar a:hover{opacity:0.85;}
+  .note{font-size:0.78rem;color:var(--muted);margin-top:4px;}
+  .stock-row{display:flex;justify-content:space-between;align-items:center;
+             padding:6px 0;border-bottom:1px solid var(--border);}
+  .stock-name{font-weight:600;}
+  .stock-price{font-size:1.05rem;font-weight:700;}
+  @media(max-width:480px){body{font-size:15px;padding:8px;}
+    th,td{padding:6px 8px;}.nav-bar a{font-size:0.8rem;padding:6px 10px;}}
 </style>
-</head>
+<title>D1 유동성</title></head>
 <body>
+<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_3_supply_demand.html">3️⃣ 수급</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_5_narrative_vs_numbers.html">5️⃣ 내러티브</a><a href="dashboard_6_macro_scenarios.html">6️⃣ 매크로</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 중립분석</a></nav>
 
-<div class="topbar">
-  <div class="topbar-left">
-    <a href="dashboard_index.html" class="back-btn">← 메인 허브</a>
-    <span class="breadcrumb">대시보드 1 / 8 · 유동성 방향 감지 엔진</span>
+<header style="margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 26일 (목) 기준 | 최종 업데이트: 2026-02-26</div>
+  <h1>💧 1단계: 유동성 방향 감지 엔진</h1>
+  <div style="color:var(--muted);font-size:0.95rem;">글로벌·한국 유동성 현황 및 자금흐름 분석</div>
+</header>
+
+<h2>🇺🇸 미국 유동성 지표</h2>
+<div class="grid">
+  
+<div class="card">
+  <div class="sub">M2 증가율 YoY <span class="badge tag-b">월간</span></div>
+  <div class="big-num" style="color:var(--blue);">~+4.2<span style="font-size:1rem;"> %</span></div>
+  <div class="note">Jan 2026 추정</div>
+</div>
+  
+<div class="card">
+  <div class="sub">실질금리 (명목-CPI) <span class="badge tag-y">실질</span></div>
+  <div class="big-num" style="color:var(--yellow);">+1.37<span style="font-size:1rem;"> %</span></div>
+  <div class="note">Fed Rate 3.75% – CPI 2.38%</div>
+</div>
+  
+<div class="card">
+  <div class="sub">10Y-2Y 금리 스프레드 <span class="badge tag-g">스프레드</span></div>
+  <div class="big-num" style="color:var(--green);">+0.43<span style="font-size:1rem;"> %</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">정상 커브</span></div>
+  <div class="note">국채 정상화 구간</div>
+</div>
+  
+<div class="card">
+  <div class="sub">달러인덱스 DXY <span class="badge tag-g">약달러</span></div>
+  <div class="big-num" style="color:var(--green);">97.64<span style="font-size:1rem;"> </span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">−11.2% vs 고점</span></div>
+  <div class="note">위험자산 선호 환경</div>
+</div>
+</div>
+
+<h2>🇰🇷 한국 유동성 지표</h2>
+<div class="grid">
+  
+<div class="card">
+  <div class="sub">M2 잔고 (Dec 2025) <span class="badge tag-b">최고</span></div>
+  <div class="big-num" style="color:var(--blue);">4,537조<span style="font-size:1rem;"> KRW</span><span style="color:var(--blue);font-size:0.9rem;margin-left:8px;">사상 최고</span></div>
+  <div class="note">전월 대비 +23조 증가</div>
+</div>
+  
+<div class="card">
+  <div class="sub">한국은행 기준금리 <span class="badge tag-y">동결</span></div>
+  <div class="big-num" style="color:var(--yellow);">2.50<span style="font-size:1rem;"> %</span><span style="color:var(--yellow);font-size:0.9rem;margin-left:8px;">6연속 동결</span></div>
+  <div class="note">이재명 정부 증시부양 정책 배경</div>
+</div>
+  
+<div class="card">
+  <div class="sub">10Y-2Y 금리 스프레드 <span class="badge tag-g">스프레드</span></div>
+  <div class="big-num" style="color:var(--green);">+43bp<span style="font-size:1rem;"> </span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">정상 커브</span></div>
+  <div class="note">3년물 3.124% / 10년물 3.556%</div>
+</div>
+  
+<div class="card">
+  <div class="sub">원달러 환율 <span class="badge tag-g">원화강세</span></div>
+  <div class="big-num" style="color:var(--green);">1,424<span style="font-size:1rem;"> ~1,440원</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">달러약세</span></div>
+  <div class="note">2월 26일 기준</div>
+</div>
+</div>
+
+<h2>🌍 글로벌 ETF 자금 흐름 (2026년 1~2월)</h2>
+<div class="grid">
+  <div class="card">
+    <h3>글로벌 자금 이동 요약</h3>
+    <table>
+      <tr><th>ETF 유형</th><th>자금 유입</th><th>비고</th></tr>
+      <tr><td>韓 코스피 추종 EWY</td><td class="green">+$36억</td><td>YTD +39% 수익률, 세계 최상위</td></tr>
+      <tr><td>이머징마켓</td><td class="green">+$19B</td><td>글로벌 자금 선진국→신흥국 이동</td></tr>
+      <tr><td>채권 ETF</td><td class="green">+$46B</td><td>중기채 선호 (BND, VCIT)</td></tr>
+      <tr><td>미국 주식 ETF</td><td>+$17B</td><td>VOO 중심, 비중 축소 추세</td></tr>
+      <tr><td>레버리지 ETF</td><td class="red">−$7B</td><td>SOXL −$6B 이탈</td></tr>
+    </table>
   </div>
-  <div class="nav-btns">
-    <a href="dashboard_2_valuation.html" class="nav-btn">다음: 밸류에이션 →</a>
+  <div class="card">
+    <h3>🚦 유동성 신호등</h3>
+    <div style="margin:8px 0;"><span class="badge tag-g">🟢 한국 M2</span> 사상 최고 — 강세장 지속</div>
+    <div style="margin:8px 0;"><span class="badge tag-g">🟢 DXY 약세</span> 97.6 — 위험자산 선호</div>
+    <div style="margin:8px 0;"><span class="badge tag-y">🟡 미 Fed 동결</span> 3.75% — 추가 인하 가능성</div>
+    <div style="margin:8px 0;"><span class="badge tag-y">🟡 한은 동결</span> 2.50% — 하반기 인하 기대</div>
+    <div style="margin:8px 0;"><span class="badge tag-g">🟢 EWY 자금</span> +$36억 유입 — 외국인 관심↑</div>
+    <h3 style="margin-top:12px;">📍 종합 시그널</h3>
+    <p style="color:var(--green);font-weight:700;font-size:1.1rem;">글로벌 자금의 한국 집중 유입<br>코스피 강세장 지속 가능성 高</p>
   </div>
 </div>
 
-<div class="header">
-  <h1>💧 <span>유동성 방향 감지 엔진</span></h1>
-  <p style="color:var(--muted);font-size:.88rem;margin-top:8px;">시장의 '물'이 어디로 흐르는지 먼저 본다 — 1단계 분석</p>
-  <div class="header-meta">
-    <span class="badge badge-date">📅 기준일: 2026-02-26</span>
-    <span class="badge badge-src">🔄 일부 월간 지표 포함</span>
-    <span class="badge badge-warn">⚠️ 투자 조언 아님 · 참고용</span>
-  </div>
-</div>
 
-<div class="container">
-
-  <!-- 미국 유동성 -->
-  <div class="section-title">🇺🇸 미국 유동성 지표</div>
-  <div class="metric-grid">
-    <div class="mcard blue">
-      <div class="mlabel">연방기금금리 (Fed Funds)</div>
-      <div class="mvalue blue">3.625%</div>
-      <div class="msub">동결 (2026-01-28 FOMC)</div>
-      <div class="msrc"><span class="freshness stale-week">🟡 월간</span> 출처: <a href="https://www.federalreserve.gov/releases/h15/" target="_blank">연방준비제도 H15</a></div>
-    </div>
-    <div class="mcard yellow">
-      <div class="mlabel">미국 M2 증가율 (YoY)</div>
-      <div class="mvalue yellow">+4.95%</div>
-      <div class="msub">2026년 1월 기준</div>
-      <div class="msrc"><span class="freshness stale-week">🟡 월간</span> 출처: <a href="https://fred.stlouisfed.org/series/M2SL" target="_blank">FRED / 연준</a></div>
-    </div>
-    <div class="mcard green">
-      <div class="mlabel">10Y-2Y 국채 스프레드</div>
-      <div class="mvalue green">+0.61%</div>
-      <div class="msub">정상 수익률 곡선 (경기 확장)</div>
-      <div class="msrc"><span class="freshness fresh">🟢 일간</span> 출처: <a href="https://fred.stlouisfed.org/series/T10Y2Y" target="_blank">FRED</a></div>
-    </div>
-    <div class="mcard green">
-      <div class="mlabel">달러 인덱스 (DXY)</div>
-      <div class="mvalue green">97.84</div>
-      <div class="msub">약세 국면 (-11% 고점比) → 위험자산 유리</div>
-      <div class="msrc"><span class="freshness fresh">🟢 일간</span> 출처: <a href="https://kr.investing.com/indices/usdollar-historical-data" target="_blank">Investing.com</a> · 2026-02-24</div>
-    </div>
-    <div class="mcard yellow">
-      <div class="mlabel">미국 실질금리</div>
-      <div class="mvalue yellow">+1.11%</div>
-      <div class="msub">명목 3.625% − 인플레 2.50%</div>
-      <div class="msrc"><span class="freshness fresh">🟢 일간</span> 출처: <a href="https://fred.stlouisfed.org/series/DFII10" target="_blank">FRED TIPS</a></div>
-    </div>
-  </div>
-
-  <!-- 한국 유동성 -->
-  <div class="section-title">🇰🇷 한국 유동성 지표</div>
-  <div class="metric-grid">
-    <div class="mcard yellow">
-      <div class="mlabel">한국은행 기준금리</div>
-      <div class="mvalue yellow">2.50%</div>
-      <div class="msub">6회 연속 동결 (2026-02-26 확인)</div>
-      <div class="msrc"><span class="freshness fresh">🟢 확인</span> 출처: <a href="https://www.bok.or.kr" target="_blank">한국은행 BOK</a> · TradingView</div>
-    </div>
-    <div class="mcard green">
-      <div class="mlabel">M2 통화량 잔액</div>
-      <div class="mvalue green">4,537조</div>
-      <div class="msub">2025년 12월 기준 (+23.4조 월간)</div>
-      <div class="msrc"><span class="freshness stale-old">🔴 월간 (2월 지연)</span> 출처: <a href="https://ko.tradingeconomics.com/south-korea/money-supply-m2" target="_blank">TradingEconomics / BOK</a></div>
-    </div>
-    <div class="mcard green">
-      <div class="mlabel">M2 증가율 (YoY)</div>
-      <div class="mvalue green">+5.4%</div>
-      <div class="msub">2025년 12월 YoY</div>
-      <div class="msrc"><span class="freshness stale-old">🔴 월간 (2월 지연)</span> 출처: <a href="https://ko.tradingeconomics.com/south-korea/money-supply-m2" target="_blank">TradingEconomics</a></div>
-    </div>
-    <div class="mcard green">
-      <div class="mlabel">원/달러 환율</div>
-      <div class="mvalue green">1,429</div>
-      <div class="msub">2026-02-25 종가 (장중 1,425~1,442)</div>
-      <div class="msrc"><span class="freshness fresh">🟢 일간</span> 출처: <a href="https://www.yna.co.kr/view/AKR20260226044200002" target="_blank">연합뉴스</a> · <a href="https://spot.wooribank.com" target="_blank">우리은행</a></div>
-    </div>
-    <div class="mcard green">
-      <div class="mlabel">한국 제조업 PMI</div>
-      <div class="mvalue green">51.2</div>
-      <div class="msub">2026년 1월 · 17개월 최고 (전월 50.1)</div>
-      <div class="msrc"><span class="freshness stale-week">🟡 월간</span> 출처: <a href="https://www.pmi.spglobal.com/Public/Home/PressRelease/09219b49aa06438b9248572106b15925" target="_blank">S&P Global PMI</a></div>
-    </div>
-  </div>
-
-  <!-- 글로벌 ETF 자금 흐름 -->
-  <div class="section-title">🌍 글로벌 ETF 자금 흐름 (2026.01 기준)</div>
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th>자산군</th>
-        <th>순유입액</th>
-        <th>대표 ETF</th>
-        <th>시사점</th>
-        <th>방향</th>
-        <th>출처 / 날짜</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>국제 주식 (신흥국·선진국)</strong></td>
-        <td style="color:var(--green);font-weight:700;">+$51B</td>
-        <td>IEMG $9B, EEM $4B, VXUS $6B</td>
-        <td>미국 집중 → 글로벌 분산 가속</td>
-        <td><span class="tag tag-bull">강세</span></td>
-        <td>iShares / 2026.01</td>
-      </tr>
-      <tr>
-        <td><strong>채권 (중·단기)</strong></td>
-        <td style="color:var(--green);font-weight:700;">+$46B</td>
-        <td>BND, VCIT</td>
-        <td>안전자산 수요 → 변동성 경계</td>
-        <td><span class="tag tag-warn">중립</span></td>
-        <td>Vanguard / 2026.01</td>
-      </tr>
-      <tr>
-        <td><strong>천연자원·원자재</strong></td>
-        <td style="color:var(--green);font-weight:700;">+$7B</td>
-        <td>COPX +93% YTD, 구리 ETF</td>
-        <td>원자재 슈퍼사이클 진입 신호</td>
-        <td><span class="tag tag-bull">강세</span></td>
-        <td>Bloomberg / 2026.01</td>
-      </tr>
-      <tr>
-        <td><strong>미국 주식</strong></td>
-        <td style="color:var(--yellow);font-weight:700;">+$17B</td>
-        <td>VOO $11B (S&P500)</td>
-        <td>미국 집중도 완화 중</td>
-        <td><span class="tag tag-neut">중립</span></td>
-        <td>Vanguard / 2026.01</td>
-      </tr>
-      <tr>
-        <td><strong>레버리지 ETF (반도체)</strong></td>
-        <td style="color:var(--red);font-weight:700;">-$7B</td>
-        <td>SOXL -$6B (3배 반도체)</td>
-        <td>투기 포지션 청산 → 과열 주의</td>
-        <td><span class="tag tag-bear">주의</span></td>
-        <td>Direxion / 2026.01</td>
-      </tr>
-    </tbody>
+<div class="card" style="margin-top:16px;">
+  <h3>📌 유동성 환경 관련 종목</h3>
+  <table>
+    <tr><th>종목명</th><th>주가</th><th>등락</th><th>투자포인트</th></tr>
+    <tr>
+          <td><strong>TIGER 미국채10년선물</strong><br><span class="sub">305080</span></td>
+          <td style="font-weight:700;">~10,800원</td>
+          <td style="color:var(--muted);font-weight:600;">—</td>
+          <td class="sub">금리 동결 수혜, 채권 안전자산</td>
+        </tr><tr>
+          <td><strong>KODEX 달러선물</strong><br><span class="sub">271060</span></td>
+          <td style="font-weight:700;">~12,300원</td>
+          <td style="color:var(--muted);font-weight:600;">—</td>
+          <td class="sub">달러 약세 구간 헤지 활용</td>
+        </tr><tr>
+          <td><strong>iShares MSCI Korea ETF</strong><br><span class="sub">EWY(NYSE)</span></td>
+          <td style="font-weight:700;">$78 내외</td>
+          <td style="color:var(--green);font-weight:600;">+39% YTD</td>
+          <td class="sub">글로벌 자금 韓증시 유입, 1개월 +17%</td>
+        </tr><tr>
+          <td><strong>TIGER 이머징마켓</strong><br><span class="sub">195970</span></td>
+          <td style="font-weight:700;">~10,500원</td>
+          <td style="color:var(--muted);font-weight:600;">—</td>
+          <td class="sub">이머징 자금 유입 $19B</td>
+        </tr>
   </table>
-
-  <!-- 종합 판단 -->
-  <div class="two-col">
-    <div class="verdict-box bull">
-      <h3>📈 강세 요인 (Bullish)</h3>
-      <p>
-        • 달러 약세(DXY 97.84) → 신흥국·원자재 유리<br>
-        • 글로벌 ETF 국제 주식 대규모 유입 ($51B)<br>
-        • 한국 제조업 PMI 51.2 (17개월 최고)<br>
-        • 원/달러 안정 (1,429 → 수출 기업 유리)<br>
-        • M2 증가율 지속 (+5.4% YoY)
-      </p>
-    </div>
-    <div class="verdict-box bear">
-      <h3>📉 위험 요인 (Bearish)</h3>
-      <p>
-        • 한국 기준금리 2.5% 동결 → 금리 인하 지연 리스크<br>
-        • 채권 유입 $46B → 투자자 안전자산 도피 수요 존재<br>
-        • 레버리지 ETF 청산 → 투기 심리 위축<br>
-        • M2 한국 데이터 2개월 지연 (신뢰도 제한)<br>
-        • 미 실질금리 +1.11% → 고금리 유지 압력
-      </p>
-    </div>
-  </div>
-
-  <!-- 바이어스 경고 -->
-  <div class="bias-box">
-    <h4>⚠️ 분석 한계 및 편향 주의</h4>
-    <p>ETF 자금 흐름 데이터는 1월 기준이며 2월 최신 수치는 미반영. M2 한국 데이터는 2개월 시차 존재. 유동성 지표 단독으로 투자 결정 금지. 반드시 수급(3단계), 밸류에이션(2단계) 지표와 병행 분석 필요.</p>
-  </div>
-
-  <!-- 결론 -->
-  <div class="verdict-box neut" style="margin-top:24px;">
-    <h3>🎯 종합 결론</h3>
-    <p>
-      유동성은 <strong style="color:var(--green);">선별적 위험자산 선호</strong> 구간. 달러 약세 + 한국 PMI 반등 + 글로벌 분산 자금 유입이 긍정적이나,
-      기준금리 동결 장기화와 채권 유입 규모가 보수적 시장 심리도 반영. <br>
-      <strong style="color:var(--yellow);">결론: 완전 위험-온(Risk-On)이 아닌 "스마트 선택" 국면.</strong>
-    </p>
-  </div>
-
+  <div class="note">⚠️ 주가는 참고용 추정치. 투자 전 직접 확인 필요. 출처: 증권사 리포트 / 2026-02-26</div>
 </div>
 
-<div class="footer">
-  📅 마지막 업데이트: 2026-02-26 · 데이터 출처: BOK, FRED, Investing.com, S&P Global PMI, iShares, Yonhap · ⚠️ 본 자료는 투자 조언이 아닙니다
-  <br><a href="dashboard_index.html" style="color:var(--blue);text-decoration:none;">← 메인 허브로 돌아가기</a>
+<div class="card" style="margin-top:16px;background:#0d2b4a;">
+  <h3>📌 H1 2026 포지셔닝 전략</h3>
+  <p>✅ 미국 집중 → <strong>글로벌 분산</strong> (EWY, IEMG, VXUS)<br>
+  ✅ 장기채 회피 → <strong>중기채 선호</strong> (BND, VCIT)<br>
+  ✅ 레버리지 축소 → <strong>우량 대형주 중심</strong><br>
+  ✅ 한국 비중 확대 — KOSPI 1개월 +17%, 글로벌 1위 수익률</p>
 </div>
-
-</body>
-</html>
+<div class="note" style="margin-top:12px;">출처: 한국은행, TradingEconomics, 인베스팅닷컴, 서울경제 | 기준일: 2026-02-26</div>
+</body></html>
