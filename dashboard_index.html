@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
+<!DOCTYPE html><html lang="ko">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -15,12 +13,10 @@
   h2{font-size:clamp(1.1rem,3vw,1.4rem);margin:20px 0 10px;color:var(--blue);}
   h3{font-size:clamp(0.95rem,2.5vw,1.15rem);margin:12px 0 6px;color:var(--yellow);}
   .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;
-        padding:16px;}
-  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;
-         font-weight:600;margin:2px;}
-  .green{color:var(--green);} .red{color:var(--red);} .yellow{color:var(--yellow);}
-  .blue{color:var(--blue);} .purple{color:var(--purple);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;font-weight:600;margin:2px;}
+  .green{color:var(--green);}.red{color:var(--red);}.yellow{color:var(--yellow);}
+  .blue{color:var(--blue);}.purple{color:var(--purple);}
   .big-num{font-size:clamp(1.5rem,5vw,2.4rem);font-weight:700;}
   .sub{font-size:0.85rem;color:var(--muted);}
   .tag-g{background:#1a3d1a;color:var(--green);border:1px solid var(--green);}
@@ -31,139 +27,124 @@
   th{background:#1c2128;padding:8px 10px;text-align:left;color:var(--muted);}
   td{padding:8px 10px;border-bottom:1px solid var(--border);}
   .nav-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;
-             border-radius:6px;text-decoration:none;font-size:0.85rem;font-weight:600;}
+  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;border-radius:6px;
+             text-decoration:none;font-size:0.85rem;font-weight:600;}
   .nav-bar a:hover{opacity:0.85;}
   .note{font-size:0.78rem;color:var(--muted);margin-top:4px;}
   .stock-row{display:flex;justify-content:space-between;align-items:center;
              padding:6px 0;border-bottom:1px solid var(--border);}
-  .stock-name{font-weight:600;}
-  .stock-price{font-size:1.05rem;font-weight:700;}
+  .alert-box{border:1px solid var(--yellow);background:#1c1a00;border-radius:8px;
+             padding:12px;margin:12px 0;font-size:0.9rem;}
   @media(max-width:480px){body{font-size:15px;padding:8px;}
     th,td{padding:6px 8px;}.nav-bar a{font-size:0.8rem;padding:6px 10px;}}
 </style>
-
-<title>KOSPI 전문가 대시보드 메인</title>
-</head>
+<title>KOSPI 전문가 대시보드</title></head>
 <body>
 <header style="text-align:center;padding:20px 0 14px;border-bottom:1px solid var(--border);margin-bottom:20px;">
-  <div style="font-size:0.82rem;color:var(--muted);">🗓 2026년 2월 26일 (목) | 최신 데이터 기준 | v4.0</div>
+  <div style="font-size:0.82rem;color:var(--muted);">🗓 2026년 2월 27일 (금) | 최신 데이터 기준 | v5.0</div>
   <h1 style="font-size:clamp(1.6rem,5vw,2.4rem);">📊 KOSPI 전문가 대시보드</h1>
   <div style="color:var(--muted);margin-top:6px;">8개 분석 엔진으로 한국 증시를 입체적으로 분석합니다</div>
 </header>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px;">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;">
   <div class="card" style="text-align:center;">
-    <div style="font-size:0.8rem;color:var(--muted);">KOSPI 장중고가</div>
-    <div class="big-num green">6,205</div>
-    <div style="font-size:0.8rem;color:var(--green);">사상 첫 6200 돌파 🎉</div>
+    <div class="sub">KOSPI 전일종가</div>
+    <div class="big-num green">6,307</div>
+    <div style="font-size:0.8rem;color:var(--green);">+3.67% 사상 최고 🎉</div>
   </div>
   <div class="card" style="text-align:center;">
-    <div style="font-size:0.8rem;color:var(--muted);">1개월 수익률</div>
-    <div class="big-num green">+17%</div>
-    <div style="font-size:0.8rem;color:var(--muted);">글로벌 1위</div>
+    <div class="sub">오늘 출발(오전)</div>
+    <div class="big-num red">6,247</div>
+    <div style="font-size:0.8rem;color:var(--red);">NVDA 쇼크 −0.95%</div>
   </div>
   <div class="card" style="text-align:center;">
-    <div style="font-size:0.8rem;color:var(--muted);">선행 PER</div>
-    <div class="big-num yellow">10.1배</div>
-    <div style="font-size:0.8rem;color:var(--green);">글로벌 최저 수준</div>
+    <div class="sub">삼성전자 시총</div>
+    <div class="big-num green">$1조</div>
+    <div style="font-size:0.8rem;color:var(--green);">국내 첫 1조달러 🏆</div>
   </div>
   <div class="card" style="text-align:center;">
-    <div style="font-size:0.8rem;color:var(--muted);">원달러 환율</div>
-    <div class="big-num blue">1,424</div>
-    <div style="font-size:0.8rem;color:var(--green);">달러 약세 수혜</div>
+    <div class="sub">원달러 환율</div>
+    <div class="big-num yellow">1,432</div>
+    <div style="font-size:0.8rem;color:var(--yellow);">NVDA 후 +6.4원</div>
   </div>
   <div class="card" style="text-align:center;">
-    <div style="font-size:0.8rem;color:var(--muted);">엔비디아 Q4</div>
-    <div class="big-num green">$68.1B</div>
-    <div style="font-size:0.8rem;color:var(--green);">예상 상회 서프라이즈</div>
+    <div class="sub">코스피 목표(유안타)</div>
+    <div class="big-num blue">8,000</div>
+    <div style="font-size:0.8rem;color:var(--blue);">pt 상향 조정</div>
   </div>
 </div>
 
 <div style="background:#161b22;border:1px solid var(--yellow);border-radius:10px;padding:14px;margin-bottom:18px;">
-  <strong>🔥 오늘의 핵심 포인트 (2026-02-26)</strong><br>
-  KOSPI 사상 첫 <span class="green">6,200선 돌파</span> | 엔비디아 Q4 매출 <span class="green">$68.1B 서프라이즈</span> | 기관 <span class="green">+8,803억</span> 매수 | 외국인 <span class="red">-12,919억</span> 매도 지속 | 신용잔고 <span class="red">32조원 사상 최고</span> 경고
+  <strong>🔥 2026년 2월 27일 (금) 오늘의 핵심 포인트</strong><br>
+  📌 어제 KOSPI <span class="green">6,307 (+3.67%)</span> 사상 최고 | 
+  삼성전자 시총 <span class="green">$1조 달성</span> (국내 최초) | 
+  엔비디아 Q4 <span class="green">$68.1B 서프라이즈</span> 그러나 주가 <span class="red">−5.46%</span> | 
+  나스닥 <span class="red">−1.18%</span> 동반 하락 | 
+  한은 기준금리 <span class="yellow">2.5% 6연속 동결</span> | 
+  코스피 오늘 <span class="red">6,247 (−0.95%) 출발</span> — 분할 저가매수 고려 구간
 </div>
 
 <h2>📌 8개 분석 대시보드</h2>
-<div class="grid">
-
-<a href="dashboard_1_liquidity.html" style="text-decoration:none;color:inherit;">
-  <div class="card" style="border-color:var(--green);transition:transform .15s;"
+<div class="grid"><a href="dashboard_1_liquidity.html" style="text-decoration:none;color:inherit;">
+  <div class="card" style="border-color:var(--blue);transition:transform .15s;"
        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
     <div style="font-size:2rem;margin-bottom:6px;">1️⃣</div>
-    <h3 style="color:var(--green);">유동성 방향 감지 엔진</h3>
-    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">DXY 97.6 / M2 4,537조 / EWY +39% YTD</p>
+    <h3 style="color:var(--blue);">유동성 방향 감지</h3>
+    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">한은 2.5% 동결 | DXY 97.6 | 원달러 1,432원 | EWY +39% YTD</p>
     <span class="badge tag-g">🔄 매일 업데이트</span>
-  </div>
-</a>
-<a href="dashboard_2_valuation.html" style="text-decoration:none;color:inherit;">
+  </div></a><a href="dashboard_2_valuation.html" style="text-decoration:none;color:inherit;">
   <div class="card" style="border-color:var(--green);transition:transform .15s;"
        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
     <div style="font-size:2rem;margin-bottom:6px;">2️⃣</div>
-    <h3 style="color:var(--green);">밸류에이션 왜곡 탐지기</h3>
-    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">12M 선행 PER 10.1배 / 2026 이익 580조+</p>
+    <h3 style="color:var(--green);">밸류에이션 탐지기</h3>
+    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">12M PER 10.1배 | 삼성 시총 $1조 | 2026 이익 580조+</p>
     <span class="badge tag-b">🔄 주간 업데이트</span>
-  </div>
-</a>
-<a href="dashboard_3_supply_demand.html" style="text-decoration:none;color:inherit;">
+  </div></a><a href="dashboard_3_supply_demand.html" style="text-decoration:none;color:inherit;">
   <div class="card" style="border-color:var(--yellow);transition:transform .15s;"
        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
     <div style="font-size:2rem;margin-bottom:6px;">3️⃣</div>
-    <h3 style="color:var(--yellow);">수급 불균형 감지기</h3>
-    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">기관 +8,803억 / 외인 -12,919억 / 개인 +2,390억</p>
+    <h3 style="color:var(--yellow);">수급 감지기</h3>
+    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">기관 +1.2조(8연속) | 외인 -13.4조 누적 | 개인 +6,610억</p>
     <span class="badge tag-g">🔄 매일 업데이트</span>
-  </div>
-</a>
-<a href="dashboard_4_industry_cycle.html" style="text-decoration:none;color:inherit;">
+  </div></a><a href="dashboard_4_industry_cycle.html" style="text-decoration:none;color:inherit;">
   <div class="card" style="border-color:var(--blue);transition:transform .15s;"
        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
     <div style="font-size:2rem;margin-bottom:6px;">4️⃣</div>
-    <h3 style="color:var(--blue);">산업 사이클 위치 탐지기</h3>
-    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">반도체·자동차·방산·조선·원전 5대 빅사이클</p>
+    <h3 style="color:var(--blue);">산업 사이클</h3>
+    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">반도체·자동차·방산·조선·원전 K-빅사이클 동시 강세</p>
     <span class="badge tag-b">🔄 주간 업데이트</span>
-  </div>
-</a>
-<a href="dashboard_5_narrative_vs_numbers.html" style="text-decoration:none;color:inherit;">
+  </div></a><a href="dashboard_5_narrative_vs_numbers.html" style="text-decoration:none;color:inherit;">
   <div class="card" style="border-color:var(--purple);transition:transform .15s;"
        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
     <div style="font-size:2rem;margin-bottom:6px;">5️⃣</div>
-    <h3 style="color:var(--purple);">내러티브 vs 숫자 검증기</h3>
-    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">엔비디아 Q4 $68.1B / 신용잔고 32조 경고</p>
+    <h3 style="color:var(--purple);">내러티브 vs 숫자</h3>
+    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">NVDA $68.1B 서프라이즈 BUT -5.46% | AI 거품론 재점화</p>
     <span class="badge tag-b">🔄 주간 업데이트</span>
-  </div>
-</a>
-<a href="dashboard_6_macro_scenarios.html" style="text-decoration:none;color:inherit;">
+  </div></a><a href="dashboard_6_macro_scenarios.html" style="text-decoration:none;color:inherit;">
   <div class="card" style="border-color:var(--yellow);transition:transform .15s;"
        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
     <div style="font-size:2rem;margin-bottom:6px;">6️⃣</div>
-    <h3 style="color:var(--yellow);">매크로 시나리오 플래너</h3>
-    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">Fed 3.75% 동결 / 한은 2.5% / 시나리오 A 50%</p>
+    <h3 style="color:var(--yellow);">매크로 시나리오</h3>
+    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">코스피 목표 8,000pt(유안타) | 한은 동결 | 나스닥 -1.18%</p>
     <span class="badge tag-y">🔄 월간 업데이트</span>
-  </div>
-</a>
-<a href="dashboard_7_bankruptcy_risk.html" style="text-decoration:none;color:inherit;">
+  </div></a><a href="dashboard_7_bankruptcy_risk.html" style="text-decoration:none;color:inherit;">
   <div class="card" style="border-color:var(--red);transition:transform .15s;"
        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
     <div style="font-size:2rem;margin-bottom:6px;">7️⃣</div>
-    <h3 style="color:var(--red);">부도위험 조기경보 시스템</h3>
-    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">신용잔고 최고 / 건설·유통 위험 / 무디스 Aa2</p>
+    <h3 style="color:var(--red);">부도위험 경보</h3>
+    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">신용잔고 32조 최고 | NVDA 쇼크 강제청산 위험 | 건설 주의</p>
     <span class="badge tag-y">🔄 월간 업데이트</span>
-  </div>
-</a>
-<a href="dashboard_neutral.html" style="text-decoration:none;color:inherit;">
+  </div></a><a href="dashboard_neutral.html" style="text-decoration:none;color:inherit;">
   <div class="card" style="border-color:var(--green);transition:transform .15s;"
        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
     <div style="font-size:2rem;margin-bottom:6px;">8️⃣</div>
-    <h3 style="color:var(--green);">KOSPI 균형 분석</h3>
-    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">6200 돌파 / VKOSPI 49.57 / 강약세 균형시각</p>
+    <h3 style="color:var(--green);">균형 분석</h3>
+    <p style="font-size:0.88rem;color:var(--muted);margin:6px 0;">KOSPI 6,307 최고 | 오늘 6,247 출발(-0.95%) | 중기 강세</p>
     <span class="badge tag-b">🔄 주간 업데이트</span>
-  </div>
-</a>
-</div>
+  </div></a></div>
 
 <footer style="margin-top:28px;padding-top:14px;border-top:1px solid var(--border);text-align:center;font-size:0.8rem;color:var(--muted);">
   <p>⚠️ 본 대시보드는 투자 참고용 정보이며 투자 권유가 아닙니다. 투자 결정의 책임은 투자자 본인에게 있습니다.</p>
-  <p>출처: 한국은행, 한국거래소, 연합뉴스, 매일경제, 인베스팅닷컴, 각 증권사 리포트 | 기준일: 2026-02-26</p>
+  <p>출처: 한국은행, 한국거래소, 연합뉴스, 매일경제, 한국경제, 인베스팅닷컴, 유안타증권 | 기준일: 2026-02-27</p>
 </footer>
 </body></html>

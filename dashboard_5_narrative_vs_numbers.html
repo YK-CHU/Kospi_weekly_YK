@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko"><head>
+<!DOCTYPE html><html lang="ko"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -13,12 +12,10 @@
   h2{font-size:clamp(1.1rem,3vw,1.4rem);margin:20px 0 10px;color:var(--blue);}
   h3{font-size:clamp(0.95rem,2.5vw,1.15rem);margin:12px 0 6px;color:var(--yellow);}
   .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;
-        padding:16px;}
-  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;
-         font-weight:600;margin:2px;}
-  .green{color:var(--green);} .red{color:var(--red);} .yellow{color:var(--yellow);}
-  .blue{color:var(--blue);} .purple{color:var(--purple);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;font-weight:600;margin:2px;}
+  .green{color:var(--green);}.red{color:var(--red);}.yellow{color:var(--yellow);}
+  .blue{color:var(--blue);}.purple{color:var(--purple);}
   .big-num{font-size:clamp(1.5rem,5vw,2.4rem);font-weight:700;}
   .sub{font-size:0.85rem;color:var(--muted);}
   .tag-g{background:#1a3d1a;color:var(--green);border:1px solid var(--green);}
@@ -29,124 +26,100 @@
   th{background:#1c2128;padding:8px 10px;text-align:left;color:var(--muted);}
   td{padding:8px 10px;border-bottom:1px solid var(--border);}
   .nav-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;
-             border-radius:6px;text-decoration:none;font-size:0.85rem;font-weight:600;}
+  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;border-radius:6px;
+             text-decoration:none;font-size:0.85rem;font-weight:600;}
   .nav-bar a:hover{opacity:0.85;}
   .note{font-size:0.78rem;color:var(--muted);margin-top:4px;}
   .stock-row{display:flex;justify-content:space-between;align-items:center;
              padding:6px 0;border-bottom:1px solid var(--border);}
-  .stock-name{font-weight:600;}
-  .stock-price{font-size:1.05rem;font-weight:700;}
+  .alert-box{border:1px solid var(--yellow);background:#1c1a00;border-radius:8px;
+             padding:12px;margin:12px 0;font-size:0.9rem;}
   @media(max-width:480px){body{font-size:15px;padding:8px;}
     th,td{padding:6px 8px;}.nav-bar a{font-size:0.8rem;padding:6px 10px;}}
 </style>
-<title>D5 내러티브</title></head>
-<body>
-<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_1_liquidity.html">1️⃣ 유동성</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_3_supply_demand.html">3️⃣ 수급</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_6_macro_scenarios.html">6️⃣ 매크로</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 중립분석</a></nav>
-
+<title>D5 내러티브</title></head><body>
+<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_1_liquidity.html">1️⃣ 유동성</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_3_supply_demand.html">3️⃣ 수급</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_6_macro_scenarios.html">6️⃣ 매크로</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 균형분석</a></nav>
 <header style="margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 26일 (목) 기준 | 최종 업데이트: 2026-02-26</div>
+  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 27일 (금) 기준 | 최종 업데이트: 2026-02-27</div>
   <h1>📖 5단계: 내러티브 vs 숫자 정합성 검증기</h1>
-  <div style="color:var(--muted);font-size:0.95rem;">시장 스토리와 실제 실적의 일치 여부 분석 — 2026년 2월</div>
+  <div style="color:var(--muted);font-size:0.95rem;">시장 스토리와 실제 실적 일치 여부 분석 — 2026년 2월 27일</div>
 </header>
+<div class="alert-box">🔥 <strong>오늘 최대 이슈:</strong> 엔비디아 <strong>$68.1B 역대 최고 실적</strong>에도 주가 <strong>−5.46%</strong> 급락 → "실적=최고, 주가=폭락" 역설 발생. AI 거품론 재점화 vs 단순 차익실현 논쟁.</div>
 
-<h2>🌟 이번 주 최대 이벤트: 엔비디아 Q4 실적</h2>
+<h2>🌟 엔비디아 Q4 실적 전체 분석</h2>
 <div class="grid">
-  
-<div class="card">
-  <div class="sub">매출 (Q4 FY2026) <span class="badge tag-g">어닝 서프라이즈</span></div>
-  <div class="big-num" style="color:var(--green);">$68.1<span style="font-size:1rem;"> B</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">컨센서스 $65.6B 상회</span></div>
-  <div class="note">2026-02-26 새벽 발표</div>
-</div>
-  
-<div class="card">
+  <div class="card">
+  <div class="sub">Q4 FY2026 매출 <span class="badge tag-g">서프라이즈</span></div>
+  <div class="big-num" style="color:var(--green);">$68.1<span style="font-size:1rem;"> B</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">컨센 $65.6B 대비 +4% 상회</span></div>
+  <div class="note">2026.02.26 새벽 발표</div></div>
+  <div class="card">
   <div class="sub">EPS (주당순이익) <span class="badge tag-g">상회</span></div>
   <div class="big-num" style="color:var(--green);">$1.62<span style="font-size:1rem;"> </span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">예상 $1.52 대비 +6.58%</span></div>
-  <div class="note">데이터센터 매출 $62.3B</div>
-</div>
-  
-<div class="card">
-  <div class="sub">Q1 FY2027 가이던스 <span class="badge tag-g">강세 전망</span></div>
-  <div class="big-num" style="color:var(--green);">~$43<span style="font-size:1rem;"> B</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">컨센서스 $41.8B 상회</span></div>
-  <div class="note">연간 성장 지속</div>
-</div>
-  
-<div class="card">
-  <div class="sub">전년 동기 대비 성장 <span class="badge tag-g">YoY</span></div>
-  <div class="big-num" style="color:var(--green);">+73<span style="font-size:1rem;"> %</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">Q4 FY25: $39.3B</span></div>
-  <div class="note">AI 수요 폭증 현실화</div>
-</div>
+  <div class="note">데이터센터 $62.3B</div></div>
+  <div class="card">
+  <div class="sub">주가 반응 <span class="badge tag-r">역설</span></div>
+  <div class="big-num" style="color:var(--red);">−5.46<span style="font-size:1rem;"> % 급락</span><span style="color:var(--red);font-size:0.9rem;margin-left:8px;">$184.89 마감</span></div>
+  <div class="note">시총 −$259억 증발</div></div>
+  <div class="card">
+  <div class="sub">Q1 FY2027 가이던스 <span class="badge tag-g">강세</span></div>
+  <div class="big-num" style="color:var(--green);">~$43<span style="font-size:1rem;"> B</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">컨센 $41.8B 상회</span></div>
+  <div class="note">AI 수요 지속 확인</div></div>
 </div>
 
-<h2>🔍 내러티브 vs 숫자 정합성 분석</h2>
+<h2>❓ 왜 좋은 실적에 주가가 떨어졌나?</h2>
+<div class="grid">
+  <div class="card" style="border-color:var(--red);">
+    <h3>⚠️ 하락 이유 분석</h3>
+    <div style="margin:8px 0;">1️⃣ <strong>차익 실현</strong> — 실적 기대감에 이미 주가 선반영</div>
+    <div style="margin:8px 0;">2️⃣ <strong>중국 매출 우려</strong> — 대중 수출 제한 지속</div>
+    <div style="margin:8px 0;">3️⃣ <strong>오픈AI 투자 불확실성</strong> — 빅테크 투자 의심</div>
+    <div style="margin:8px 0;">4️⃣ <strong>AI 거품론 재점화</strong> — 무한 성장 지속 가능한가?</div>
+  </div>
+  <div class="card" style="border-color:var(--green);">
+    <h3>✅ 강세 유지 논거</h3>
+    <div style="margin:8px 0;">1️⃣ <strong>실적 자체는 사상 최대</strong> — 펀더멘털 이상 없음</div>
+    <div style="margin:8px 0;">2️⃣ <strong>Q1 가이던스 $43B</strong> — 연간 성장 지속</div>
+    <div style="margin:8px 0;">3️⃣ <strong>개미 저가매수 14년래 최고</strong> — 수요 실재</div>
+    <div style="margin:8px 0;">4️⃣ <strong>HBM 수요 재확인</strong> — 삼성·하이닉스 수혜</div>
+  </div>
+</div>
+
+<h2>🔍 한국 시장 내러티브 정합성 체크</h2>
 <div class="grid">
   <div class="card" style="border-color:var(--green);">
-    <h3>✅ 정합성 높음 (내러티브 = 실적)</h3>
-    <div style="margin:8px 0;"><strong>반도체 AI 사이클</strong> — NVIDIA +73% YoY, SK하이닉스 영업이익 2026년 100조+ 추정</div>
-    <div style="margin:8px 0;"><strong>방산 수출 슈퍼사이클</strong> — 실제 수주 사상 최대, 실적 반영 시작</div>
-    <div style="margin:8px 0;"><strong>자동차 글로벌 확장</strong> — 현대차·기아 실적 컨센 상향, 주가 급등 정당화</div>
-    <div style="margin:8px 0;"><strong>KOSPI 이익 급증</strong> — 2026년 컨센서스 580조 (연초 대비 +35%)</div>
+    <h3>✅ 정합성 높음 (스토리=실적)</h3>
+    <p>• 반도체 AI 사이클 — NVDA 실적으로 HBM 수요 실증</p>
+    <p>• 삼성전자 시총 $1조 — 이익 기반 정당화</p>
+    <p>• 방산 수출 — 실제 수주 사상 최대</p>
+    <p>• KOSPI 이익 580조+ — 컨센서스 35% 급증</p>
   </div>
   <div class="card" style="border-color:var(--red);">
-    <h3>⚠️ 괴리 주의 (내러티브 > 실적)</h3>
-    <div style="margin:8px 0;"><strong>카카오 AI 전환</strong> — AI 내러티브 강조 vs 실제 이익 개선 더딤</div>
-    <div style="margin:8px 0;"><strong>원전 단기 급등</strong> — 수주 기대감 선반영, 실제 착공은 수년 후</div>
-    <div style="margin:8px 0;"><strong>개인 신용잔고</strong> — 32조원 사상 최고 — 레버리지 버블 신호</div>
-    <div style="margin:8px 0;"><strong>KOSPI 7,000~8,000 전망</strong> — 증권사 낙관론 vs 외국인 14조 매도</div>
+    <h3>⚠️ 주의 (스토리 > 실적)</h3>
+    <p>• 신용잔고 32조 사상 최고 — 버블 경고</p>
+    <p>• NVDA 주가 하락 = AI 거품론 트리거</p>
+    <p>• 카카오 AI 전환 — 실적 개선 더딤</p>
+    <p>• 원전 단기 급등 — 수주 미확정 구간 多</p>
   </div>
 </div>
-
-<h2>📊 KOSPI 랠리 정당화 가능한가?</h2>
-<div class="grid">
-  <div class="card" style="background:#0d2b4a;">
-    <h3>📌 Bull Case (강세 논거)</h3>
-    <p>• 12M PER 10.1배 → 이익 증가 감안 시 7,000도 저평가 가능</p>
-    <p>• 삼성·하이닉스 2개 종목이 코스피 상승의 66% 견인</p>
-    <p>• 글로벌 자금 이머징→韓 집중 유입 (EWY +39% YTD)</p>
-    <p>• AI 빅사이클이 주도 → 세계 최상위 수익률</p>
-  </div>
-  <div class="card" style="background:#3d1a1a;">
-    <h3>⚠️ Bear Case (주의 논거)</h3>
-    <p>• 신용잔고 32조원 사상 최고 — 과열 신호</p>
-    <p>• 외국인 14조 매도 지속 — 7,000 고지 장벽</p>
-    <p>• VKOSPI 49.57 — 공포지수 여전히 높음</p>
-    <p>• 미 Fed 금리 3.75%, 고금리 유지 중</p>
-  </div>
-</div>
-
-
 <div class="card" style="margin-top:16px;">
-  <h3>📌 내러티브 vs 숫자 주목 종목</h3>
-  <table>
-    <tr><th>종목명</th><th>주가</th><th>등락</th><th>투자포인트</th></tr>
-    <tr>
-          <td><strong>NVIDIA</strong><br><span class="sub">NVDA(NASDAQ)</span></td>
-          <td style="font-weight:700;">$131 내외</td>
-          <td style="color:var(--green);font-weight:600;">+0.7%</td>
-          <td class="sub">Q4 FY26 매출 $68.1B, EPS $1.62 예상 상회</td>
-        </tr><tr>
-          <td><strong>삼성전자</strong><br><span class="sub">005930</span></td>
-          <td style="font-weight:700;">~178,600원</td>
-          <td style="color:var(--green);font-weight:600;">+6.0%</td>
-          <td class="sub">HBM 공급 확대, 내러티브와 실적 모두 강함</td>
-        </tr><tr>
-          <td><strong>SK하이닉스</strong><br><span class="sub">000660</span></td>
-          <td style="font-weight:700;">~888,000원</td>
-          <td style="color:var(--green);font-weight:600;">+강세</td>
-          <td class="sub">HBM 영업이익 2026년 100조+ 추정</td>
-        </tr><tr>
-          <td><strong>카카오</strong><br><span class="sub">035720</span></td>
+  <h3>📌 내러티브 vs 숫자 핵심 종목</h3>
+  <table><tr><th>종목명</th><th>주가(참고)</th><th>등락</th><th>투자포인트</th></tr><tr><td><strong>NVIDIA</strong><br><span class="sub">NVDA(NASDAQ)</span></td>
+          <td style="font-weight:700;">$184.89</td>
+          <td style="color:var(--red);font-weight:600;">-5.46%</td>
+          <td class="sub">Q4 $68.1B 사상최대 실적 BUT 차익매물. 중국매출·투자 우려</td></tr><tr><td><strong>삼성전자</strong><br><span class="sub">005930</span></td>
+          <td style="font-weight:700;">~213,000원</td>
+          <td style="color:var(--red);font-weight:600;">-2.29% (오늘)</td>
+          <td class="sub">시총 $1조 돌파. 내러티브+실적 정합성 최고</td></tr><tr><td><strong>SK하이닉스</strong><br><span class="sub">000660</span></td>
+          <td style="font-weight:700;">~1,068,000원</td>
+          <td style="color:var(--red);font-weight:600;">-2.82% (오늘)</td>
+          <td class="sub">HBM 영업이익 2026년 100조+ — 내러티브=실적</td></tr><tr><td><strong>카카오</strong><br><span class="sub">035720</span></td>
           <td style="font-weight:700;">~65,000원</td>
           <td style="color:var(--muted);font-weight:600;">—</td>
-          <td class="sub">AI 전환 내러티브 vs 실적 부진 괴리</td>
-        </tr><tr>
-          <td><strong>한화에어로스페이스</strong><br><span class="sub">012450</span></td>
-          <td style="font-weight:700;">~750,000원</td>
-          <td style="color:var(--green);font-weight:600;">+상승</td>
-          <td class="sub">방산 내러티브 + 실적 모두 강함</td>
-        </tr>
-  </table>
-  <div class="note">⚠️ 주가는 참고용 추정치. 투자 전 직접 확인 필요. 출처: 증권사 리포트 / 2026-02-26</div>
+          <td class="sub">AI 전환 내러티브 vs 실적 부진 괴리 주의</td></tr><tr><td><strong>브로드컴</strong><br><span class="sub">AVGO(NASDAQ)</span></td>
+          <td style="font-weight:700;">~$240</td>
+          <td style="color:var(--red);font-weight:600;">-3.2%</td>
+          <td class="sub">NVDA 쇼크 동반 하락, AI 수요는 진짜</td></tr></table>
+  <div class="note">⚠️ 주가는 참고용. 실제 투자 전 증권사 확인 필수. 기준: 2026-02-27</div>
 </div>
-<div class="note" style="margin-top:12px;">출처: 인베스팅닷컴(NVIDIA), 연합뉴스, 한겨레, 브런치, 키움증권 | 기준일: 2026-02-26</div>
+<div class="note" style="margin-top:12px;">출처: 인베스팅닷컴, 한국경제, 조선비즈, 벤자민(benzinga), 이티뉴스 | 기준일: 2026-02-27</div>
 </body></html>

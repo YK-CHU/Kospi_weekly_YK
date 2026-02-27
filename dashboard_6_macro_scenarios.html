@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko"><head>
+<!DOCTYPE html><html lang="ko"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -13,12 +12,10 @@
   h2{font-size:clamp(1.1rem,3vw,1.4rem);margin:20px 0 10px;color:var(--blue);}
   h3{font-size:clamp(0.95rem,2.5vw,1.15rem);margin:12px 0 6px;color:var(--yellow);}
   .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;
-        padding:16px;}
-  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;
-         font-weight:600;margin:2px;}
-  .green{color:var(--green);} .red{color:var(--red);} .yellow{color:var(--yellow);}
-  .blue{color:var(--blue);} .purple{color:var(--purple);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;font-weight:600;margin:2px;}
+  .green{color:var(--green);}.red{color:var(--red);}.yellow{color:var(--yellow);}
+  .blue{color:var(--blue);}.purple{color:var(--purple);}
   .big-num{font-size:clamp(1.5rem,5vw,2.4rem);font-weight:700;}
   .sub{font-size:0.85rem;color:var(--muted);}
   .tag-g{background:#1a3d1a;color:var(--green);border:1px solid var(--green);}
@@ -29,129 +26,101 @@
   th{background:#1c2128;padding:8px 10px;text-align:left;color:var(--muted);}
   td{padding:8px 10px;border-bottom:1px solid var(--border);}
   .nav-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;
-             border-radius:6px;text-decoration:none;font-size:0.85rem;font-weight:600;}
+  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;border-radius:6px;
+             text-decoration:none;font-size:0.85rem;font-weight:600;}
   .nav-bar a:hover{opacity:0.85;}
   .note{font-size:0.78rem;color:var(--muted);margin-top:4px;}
   .stock-row{display:flex;justify-content:space-between;align-items:center;
              padding:6px 0;border-bottom:1px solid var(--border);}
-  .stock-name{font-weight:600;}
-  .stock-price{font-size:1.05rem;font-weight:700;}
+  .alert-box{border:1px solid var(--yellow);background:#1c1a00;border-radius:8px;
+             padding:12px;margin:12px 0;font-size:0.9rem;}
   @media(max-width:480px){body{font-size:15px;padding:8px;}
     th,td{padding:6px 8px;}.nav-bar a{font-size:0.8rem;padding:6px 10px;}}
 </style>
-<title>D6 매크로</title></head>
-<body>
-<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_1_liquidity.html">1️⃣ 유동성</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_3_supply_demand.html">3️⃣ 수급</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_5_narrative_vs_numbers.html">5️⃣ 내러티브</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 중립분석</a></nav>
-
+<title>D6 매크로</title></head><body>
+<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_1_liquidity.html">1️⃣ 유동성</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_3_supply_demand.html">3️⃣ 수급</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_5_narrative_vs_numbers.html">5️⃣ 내러티브</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 균형분석</a></nav>
 <header style="margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 26일 (목) 기준 | 최종 업데이트: 2026-02-26</div>
+  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 27일 (금) 기준 | 최종 업데이트: 2026-02-27</div>
   <h1>🌍 6단계: 매크로 시나리오 플래너</h1>
-  <div style="color:var(--muted);font-size:0.95rem;">글로벌 거시경제 3대 시나리오 분석 — 2026년 2월</div>
+  <div style="color:var(--muted);font-size:0.95rem;">글로벌 거시경제 3대 시나리오 분석 — 2026년 2월 27일</div>
 </header>
+<div class="alert-box">🌐 <strong>오늘 매크로 핵심:</strong> 한은 <strong>2.50% 6연속 동결</strong> + 성장률 2.0% 상향 | 미국 나스닥 −1.18% (NVDA 충격) | 원달러 <strong>1,432원</strong>(+6.4원) | 유안타 코스피 목표 <strong>8,000pt</strong> 상향</div>
 
-<h2>🌐 현재 거시 환경 스냅샷</h2>
+<h2>🌐 현재 거시 환경 스냅샷 (2026-02-27)</h2>
 <div class="grid">
-  
-<div class="card">
+  <div class="card">
   <div class="sub">미 연준 기준금리 <span class="badge tag-y">Fed 동결</span></div>
-  <div class="big-num" style="color:var(--yellow);">3.75<span style="font-size:1rem;"> %</span><span style="color:var(--yellow);font-size:0.9rem;margin-left:8px;">1월 FOMC 동결</span></div>
-  <div class="note">2026년 2회 인하 기대</div>
-</div>
-  
-<div class="card">
-  <div class="sub">한은 기준금리 <span class="badge tag-y">BOK 동결</span></div>
-  <div class="big-num" style="color:var(--yellow);">2.50<span style="font-size:1rem;"> %</span><span style="color:var(--yellow);font-size:0.9rem;margin-left:8px;">6연속 동결</span></div>
-  <div class="note">하반기 인하 기대</div>
-</div>
-  
-<div class="card">
-  <div class="sub">DXY 달러인덱스 <span class="badge tag-g">약달러</span></div>
-  <div class="big-num" style="color:var(--green);">97.64<span style="font-size:1rem;"> </span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">2022년 고점(114) 대비 −15%</span></div>
-  <div class="note">신흥국 강세 환경</div>
-</div>
-  
-<div class="card">
-  <div class="sub">원달러 환율 <span class="badge tag-g">원화강세</span></div>
-  <div class="big-num" style="color:var(--green);">1,424<span style="font-size:1rem;"> KRW/USD</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">약달러 수혜</span></div>
-  <div class="note">한국 수출 변수</div>
-</div>
+  <div class="big-num" style="color:var(--yellow);">3.75<span style="font-size:1rem;"> %</span><span style="color:var(--yellow);font-size:0.9rem;margin-left:8px;">동결 유지 (인상론 소수)</span></div>
+  <div class="note">2026년 2회 인하→불투명</div></div>
+  <div class="card">
+  <div class="sub">한은 기준금리 <span class="badge tag-y">BOK</span></div>
+  <div class="big-num" style="color:var(--yellow);">2.50<span style="font-size:1rem;"> %</span><span style="color:var(--yellow);font-size:0.9rem;margin-left:8px;">6연속 동결 (만장일치)</span></div>
+  <div class="note">성장률 2.0% 상향 → 인하 사이클 종료</div></div>
+  <div class="card">
+  <div class="sub">원달러 환율 <span class="badge tag-y">약화</span></div>
+  <div class="big-num" style="color:var(--yellow);">1,432<span style="font-size:1rem;"> KRW</span><span style="color:var(--yellow);font-size:0.9rem;margin-left:8px;">NVDA 쇼크 후 +6.4원</span></div>
+  <div class="note">달러 강세 전환 주의</div></div>
+  <div class="card">
+  <div class="sub">나스닥 <span class="badge tag-r">약세</span></div>
+  <div class="big-num" style="color:var(--red);">22,878<span style="font-size:1rem;"> pt</span><span style="color:var(--red);font-size:0.9rem;margin-left:8px;">−1.18% (NVDA 충격)</span></div>
+  <div class="note">미 기술주 차익 실현</div></div>
 </div>
 
-<h2>📋 3대 시나리오 분석</h2>
+<h2>📋 3대 시나리오 (업데이트: 2.27)</h2>
 <div class="grid">
   <div class="card" style="border-color:var(--green);">
-    <h3>🟢 시나리오 A: 골디락스 (확률 50%)</h3>
-    <p><strong>조건:</strong> AI 사이클 지속 + 미 연준 2회 인하 + 원화 강세</p>
-    <div style="margin:8px 0;"><strong>KOSPI 목표:</strong> <span class="green">7,000~8,000pt</span></div>
-    <div style="margin:8px 0;"><strong>유리한 자산:</strong> 반도체·자동차·방산 주도주</div>
-    <div style="margin:8px 0;"><strong>ETF 전략:</strong> KODEX 200 비중 확대, EWY 유지</div>
-    <p class="note">증권사 다수 목표치 7,000~8,000pt 제시</p>
+    <h3>🟢 시나리오 A: 골디락스 (확률 45%)</h3>
+    <p><strong>조건:</strong> NVDA 조정 후 AI 사이클 재확인 + 코스피 주도주 순환 지속</p>
+    <div style="margin:8px 0;"><strong>KOSPI 목표:</strong> <span class="green">7,000~8,000pt</span> (유안타 상향)</div>
+    <div style="margin:8px 0;"><strong>전략:</strong> KOSPI 조정 시 주도주 저가 매수</div>
+    <p class="note">유안타: 유동성·AI·정책 삼박자 → 8,000pt 목표</p>
   </div>
   <div class="card" style="border-color:var(--yellow);">
-    <h3>🟡 시나리오 B: 횡보·선별 (확률 35%)</h3>
-    <p><strong>조건:</strong> Fed 금리 동결 장기화 + 외국인 매도 지속</p>
+    <h3>🟡 시나리오 B: 횡보 선별 (확률 40%)</h3>
+    <p><strong>조건:</strong> NVDA 조정 장기화 + 외국인 매도 지속 + AI 거품론</p>
     <div style="margin:8px 0;"><strong>KOSPI 범위:</strong> <span class="yellow">6,000~6,800pt</span></div>
-    <div style="margin:8px 0;"><strong>유리한 자산:</strong> 배당주·가치주·채권</div>
-    <div style="margin:8px 0;"><strong>ETF 전략:</strong> TIGER 배당성장 + VCIT (중기채)</div>
-    <p class="note">외국인 14조 매물이 조정의 방아쇠 가능성</p>
+    <div style="margin:8px 0;"><strong>전략:</strong> 배당주·가치주·중기채 비중 확대</div>
+    <p class="note">확률 상향 — NVDA 쇼크로 불확실성 증가</p>
   </div>
   <div class="card" style="border-color:var(--red);">
     <h3>🔴 시나리오 C: 조정 (확률 15%)</h3>
-    <p><strong>조건:</strong> 미 경기침체 + 신용잔고 버블 붕괴</p>
+    <p><strong>조건:</strong> AI 거품 붕괴 + 신용잔고 강제청산 + 달러 급등</p>
     <div style="margin:8px 0;"><strong>KOSPI 범위:</strong> <span class="red">5,000~5,500pt</span></div>
-    <div style="margin:8px 0;"><strong>유리한 자산:</strong> 현금·국채·달러 헤지</div>
-    <div style="margin:8px 0;"><strong>ETF 전략:</strong> KODEX 인버스, 달러선물</div>
-    <p class="note">신용잔고 32조원 (사상 최고) 주의</p>
+    <div style="margin:8px 0;"><strong>전략:</strong> KODEX 인버스, 달러선물 헤지</div>
+    <p class="note">신용잔고 32조 + NVDA -5% → 트리거 주의</p>
   </div>
 </div>
 
-<h2>🗓 2026년 상반기 주요 이벤트 일정</h2>
-<div class="grid">
-  <div class="card">
-    <table>
-      <tr><th>날짜</th><th>이벤트</th><th>시장 영향</th></tr>
-      <tr><td>2026-02-26</td><td>엔비디아 Q4 실적 발표</td><td class="green">서프라이즈 — 반도체 강세</td></tr>
-      <tr><td>2026-03 예정</td><td>미 FOMC</td><td class="yellow">동결 예상, 인하 시사 여부 주목</td></tr>
-      <tr><td>2026-04 예정</td><td>한국 기업 1분기 실적</td><td class="green">이익 급증 확인 여부 핵심</td></tr>
-      <tr><td>2026-05 예정</td><td>한은 금통위</td><td class="yellow">금리 인하 가능성 탐색</td></tr>
-    </table>
-  </div>
+<h2>🗓 향후 주요 이벤트</h2>
+<div class="card">
+  <table>
+    <tr><th>날짜</th><th>이벤트</th><th>시장 영향</th></tr>
+    <tr><td>2026-02-26(어제)</td><td>한은 금통위 — 2.5% 동결</td><td class="yellow">6연속 동결. 인하 사이클 사실상 종료</td></tr>
+    <tr><td>2026-02-26(어제)</td><td>NVIDIA Q4 실적 발표</td><td class="green">$68.1B 서프라이즈 BUT 주가 −5.46%</td></tr>
+    <tr><td>2026-03 초순</td><td>미 고용지표·CPI</td><td class="yellow">Fed 금리 경로 영향</td></tr>
+    <tr><td>2026-03 중순</td><td>FOMC</td><td class="yellow">동결 가능성 높음</td></tr>
+    <tr><td>2026-04</td><td>코스피 1분기 실적 시즌</td><td class="green">580조+ 이익 확인 시 추가 상승</td></tr>
+  </table>
 </div>
-
-
 <div class="card" style="margin-top:16px;">
   <h3>📌 매크로 시나리오별 ETF 전략</h3>
-  <table>
-    <tr><th>종목명</th><th>주가</th><th>등락</th><th>투자포인트</th></tr>
-    <tr>
-          <td><strong>KODEX 200</strong><br><span class="sub">069500</span></td>
+  <table><tr><th>종목명</th><th>주가(참고)</th><th>등락</th><th>투자포인트</th></tr><tr><td><strong>KODEX 200</strong><br><span class="sub">069500</span></td>
           <td style="font-weight:700;">~67,000원</td>
           <td style="color:var(--green);font-weight:600;">+2%↑</td>
-          <td class="sub">시나리오 A (강세) 기본 포지션</td>
-        </tr><tr>
-          <td><strong>TIGER 미국S&P500</strong><br><span class="sub">360750</span></td>
+          <td class="sub">시나리오 A 기본 포지션</td></tr><tr><td><strong>TIGER 미국S&P500</strong><br><span class="sub">360750</span></td>
           <td style="font-weight:700;">~19,000원</td>
+          <td style="color:var(--muted);font-weight:600;">−0.54% 연동</td>
+          <td class="sub">글로벌 분산 기본 ETF</td></tr><tr><td><strong>KODEX 달러선물</strong><br><span class="sub">271060</span></td>
+          <td style="font-weight:700;">~12,400원</td>
           <td style="color:var(--green);font-weight:600;">+상승</td>
-          <td class="sub">글로벌 분산 기본 ETF</td>
-        </tr><tr>
-          <td><strong>KODEX 인버스</strong><br><span class="sub">114800</span></td>
+          <td class="sub">NVDA 쇼크 후 달러강세 → 헤지 활용</td></tr><tr><td><strong>KODEX 인버스</strong><br><span class="sub">114800</span></td>
           <td style="font-weight:700;">~3,200원</td>
           <td style="color:var(--muted);font-weight:600;">—</td>
-          <td class="sub">시나리오 C (급락) 헤지 수단</td>
-        </tr><tr>
-          <td><strong>iShares MSCI Korea EWY</strong><br><span class="sub">EWY(NYSE)</span></td>
+          <td class="sub">시나리오 C 헤지 수단</td></tr><tr><td><strong>iShares MSCI Korea EWY</strong><br><span class="sub">EWY(NYSE)</span></td>
           <td style="font-weight:700;">$78 내외</td>
           <td style="color:var(--green);font-weight:600;">+39% YTD</td>
-          <td class="sub">글로벌 자금 韓 ETF 대표</td>
-        </tr><tr>
-          <td><strong>TIGER 이머징마켓채권</strong><br><span class="sub">291210</span></td>
-          <td style="font-weight:700;">~10,000원</td>
-          <td style="color:var(--muted);font-weight:600;">—</td>
-          <td class="sub">이머징 채권 분산 투자</td>
-        </tr>
-  </table>
-  <div class="note">⚠️ 주가는 참고용 추정치. 투자 전 직접 확인 필요. 출처: 증권사 리포트 / 2026-02-26</div>
+          <td class="sub">글로벌 자금 韓 ETF 대표</td></tr></table>
+  <div class="note">⚠️ 주가는 참고용. 실제 투자 전 증권사 확인 필수. 기준: 2026-02-27</div>
 </div>
-<div class="note" style="margin-top:12px;">출처: TradingEconomics, 조선일보, 딜로이트, 연합뉴스 | 기준일: 2026-02-26</div>
+<div class="note" style="margin-top:12px;">출처: 조선일보(한은), 연합뉴스, 유안타증권, 이티뉴스, TradingEconomics | 기준일: 2026-02-27</div>
 </body></html>

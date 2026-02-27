@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko"><head>
+<!DOCTYPE html><html lang="ko"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -13,12 +12,10 @@
   h2{font-size:clamp(1.1rem,3vw,1.4rem);margin:20px 0 10px;color:var(--blue);}
   h3{font-size:clamp(0.95rem,2.5vw,1.15rem);margin:12px 0 6px;color:var(--yellow);}
   .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;
-        padding:16px;}
-  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;
-         font-weight:600;margin:2px;}
-  .green{color:var(--green);} .red{color:var(--red);} .yellow{color:var(--yellow);}
-  .blue{color:var(--blue);} .purple{color:var(--purple);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;font-weight:600;margin:2px;}
+  .green{color:var(--green);}.red{color:var(--red);}.yellow{color:var(--yellow);}
+  .blue{color:var(--blue);}.purple{color:var(--purple);}
   .big-num{font-size:clamp(1.5rem,5vw,2.4rem);font-weight:700;}
   .sub{font-size:0.85rem;color:var(--muted);}
   .tag-g{background:#1a3d1a;color:var(--green);border:1px solid var(--green);}
@@ -29,125 +26,95 @@
   th{background:#1c2128;padding:8px 10px;text-align:left;color:var(--muted);}
   td{padding:8px 10px;border-bottom:1px solid var(--border);}
   .nav-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;
-             border-radius:6px;text-decoration:none;font-size:0.85rem;font-weight:600;}
+  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;border-radius:6px;
+             text-decoration:none;font-size:0.85rem;font-weight:600;}
   .nav-bar a:hover{opacity:0.85;}
   .note{font-size:0.78rem;color:var(--muted);margin-top:4px;}
   .stock-row{display:flex;justify-content:space-between;align-items:center;
              padding:6px 0;border-bottom:1px solid var(--border);}
-  .stock-name{font-weight:600;}
-  .stock-price{font-size:1.05rem;font-weight:700;}
+  .alert-box{border:1px solid var(--yellow);background:#1c1a00;border-radius:8px;
+             padding:12px;margin:12px 0;font-size:0.9rem;}
   @media(max-width:480px){body{font-size:15px;padding:8px;}
     th,td{padding:6px 8px;}.nav-bar a{font-size:0.8rem;padding:6px 10px;}}
 </style>
-<title>D3 수급</title></head>
-<body>
-<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_1_liquidity.html">1️⃣ 유동성</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_5_narrative_vs_numbers.html">5️⃣ 내러티브</a><a href="dashboard_6_macro_scenarios.html">6️⃣ 매크로</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 중립분석</a></nav>
-
+<title>D3 수급</title></head><body>
+<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_1_liquidity.html">1️⃣ 유동성</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_5_narrative_vs_numbers.html">5️⃣ 내러티브</a><a href="dashboard_6_macro_scenarios.html">6️⃣ 매크로</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 균형분석</a></nav>
 <header style="margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 26일 (목) 기준 | 최종 업데이트: 2026-02-26</div>
+  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 27일 (금) 기준 | 최종 업데이트: 2026-02-27</div>
   <h1>📊 3단계: 수급 불균형 감지기</h1>
-  <div style="color:var(--muted);font-size:0.95rem;">기관·외국인·개인 자금 흐름 — 2026년 2월 26일</div>
+  <div style="color:var(--muted);font-size:0.95rem;">투자자별 자금 흐름 분석 — 2026년 2월 27일</div>
 </header>
+<div class="alert-box">💰 <strong>어제(2.26) 수급:</strong> 기관 <strong>+1조2,427억</strong>(8거래일 연속 매수) | 개인 <strong>+6,610억</strong> | 외국인 <strong>−2조1,077억</strong> | 2월 누적 외국인 순매도 <strong>−13조4,020억</strong></div>
 
-<h2>💰 당일 투자자별 순매수 (2026-02-26)</h2>
+<h2>💰 2월 26일 투자자별 순매수</h2>
 <div class="grid">
-  
-<div class="card">
-  <div class="sub">개인 순매수 <span class="badge tag-g">개인</span></div>
-  <div class="big-num" style="color:var(--green);">+2,390<span style="font-size:1rem;"> 억원</span></div>
-  <div class="note">코스피 상승 주도</div>
-</div>
-  
-<div class="card">
+  <div class="card">
   <div class="sub">기관 순매수 <span class="badge tag-g">기관</span></div>
-  <div class="big-num" style="color:var(--green);">+8,803<span style="font-size:1rem;"> 억원</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">금융투자 중심</span></div>
-  <div class="note">금융투자 홀로 11조+ 누적</div>
-</div>
-  
-<div class="card">
+  <div class="big-num" style="color:var(--green);">+1조2,427<span style="font-size:1rem;"> 억원</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">8거래일 연속 매수</span></div>
+  <div class="note">금융투자 주도 시장 견인</div></div>
+  <div class="card">
+  <div class="sub">개인 순매수 <span class="badge tag-g">개인</span></div>
+  <div class="big-num" style="color:var(--green);">+6,610<span style="font-size:1rem;"> 억원</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">개미 매수 지속</span></div>
+  <div class="note">동학개미 줍줍 현상</div></div>
+  <div class="card">
   <div class="sub">외국인 순매도 <span class="badge tag-r">외인</span></div>
-  <div class="big-num" style="color:var(--red);">−12,919<span style="font-size:1rem;"> 억원</span><span style="color:var(--red);font-size:0.9rem;margin-left:8px;">지속 이탈</span></div>
-  <div class="note">5000→6000 구간 14조 매도</div>
-</div>
-  
-<div class="card">
-  <div class="sub">거래대금 <span class="badge tag-b">거래↑</span></div>
-  <div class="big-num" style="color:var(--blue);">역대급<span style="font-size:1rem;"> 증가</span><span style="color:var(--blue);font-size:0.9rem;margin-left:8px;">6200 돌파 급증</span></div>
-  <div class="note">증권주 동반 상승</div>
-</div>
+  <div class="big-num" style="color:var(--red);">−2조1,077<span style="font-size:1rem;"> 억원</span><span style="color:var(--red);font-size:0.9rem;margin-left:8px;">이달 −13.4조 누적</span></div>
+  <div class="note">차익 실현 지속</div></div>
+  <div class="card">
+  <div class="sub">코스닥 지수 <span class="badge tag-g">코스닥</span></div>
+  <div class="big-num" style="color:var(--green);">1,188<span style="font-size:1rem;"> pt</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">+1.97% 동반 강세</span></div>
+  <div class="note">AI·반도체 소형주 동반</div></div>
 </div>
 
-<h2>📅 코스피 5000→6000 구간 누적 수급 (1월 22일~2월 25일)</h2>
+<h2>📅 코스피 5,000→6,300 구간 누적 수급</h2>
 <div class="grid">
   <div class="card">
     <table>
-      <tr><th>투자자</th><th>누적 순매수</th><th>평가</th></tr>
-      <tr><td>🏛️ 기관 (금융투자)</td><td class="green">+10조원</td><td>시장 주도 매수</td></tr>
-      <tr><td>👤 개인</td><td class="green">+2.4조원</td><td>강력 머니무브</td></tr>
-      <tr><td>🌍 외국인</td><td class="red">−14조원</td><td>지속 차익실현</td></tr>
+      <tr><th>투자자</th><th>누적 순매수(2~26일)</th><th>평가</th></tr>
+      <tr><td>🏛️ 기관</td><td class="green">+4조8,050억</td><td>금융투자 홀로 11조+ 매수</td></tr>
+      <tr><td>👤 개인</td><td class="green">+6조3,330억</td><td>강력 머니무브 주역</td></tr>
+      <tr><td>🌍 외국인</td><td class="red">−13조4,020억</td><td>차익실현·리밸런싱 매도</td></tr>
     </table>
-    <p class="note" style="margin-top:8px;">외국인 14조 매물을 기관+개인이 흡수 → 강세 지속</p>
+    <p class="note">외국인 13.4조 매물을 기관+개인이 흡수 → 강세 지속</p>
   </div>
   <div class="card">
-    <h3>🔑 수급 특징</h3>
-    <div style="margin:6px 0;">🏠 <strong>정부 머니무브 정책</strong> — 부동산→증시 자금 유인</div>
-    <div style="margin:6px 0;">📦 <strong>ETF 구조 변화</strong> — 단일 종목 레버리지 ETF 예정</div>
-    <div style="margin:6px 0;">💼 <strong>연기금</strong> — 선별 종목 꾸준히 매수 (LG화학 등)</div>
-    <div style="margin:6px 0;">⚠️ <strong>외국인 14조 잠재 매물</strong> — 7,000pt 관건</div>
+    <h3>🔑 오늘(2.27) 수급 전망</h3>
+    <p>⚠️ NVDA −5.46% → 반도체 차익 압력</p>
+    <p>✅ 개인 저가매수 유입 (NVDA 개미 저가매수 14년래 최고)</p>
+    <p>⚠️ 외국인 매도 지속 가능성</p>
+    <p>✅ 기관 8연속 매수 기조 유지 전망</p>
   </div>
 </div>
 
-<h2>🏆 섹터별 수급 동향</h2>
-<div class="grid">
-  <div class="card">
-    <h3>🟢 매수 강세 섹터</h3>
-    <div class="stock-row"><span>반도체</span><span class="green">기관·개인 쌍매수</span></div>
-    <div class="stock-row"><span>자동차</span><span class="green">개인 주도 급등</span></div>
-    <div class="stock-row"><span>방산·조선</span><span class="green">연기금 지속 매수</span></div>
-    <div class="stock-row"><span>증권주</span><span class="green">거래대금 급증 수혜</span></div>
-  </div>
-  <div class="card">
-    <h3>🔴 매도 우세 섹터</h3>
-    <div class="stock-row"><span>건설</span><span class="red">경기 둔화 우려</span></div>
-    <div class="stock-row"><span>유통·패션</span><span class="red">소비 부진</span></div>
-    <div class="stock-row"><span>레버리지 ETF</span><span class="red">SOXL 등 이탈</span></div>
-  </div>
-</div>
-
-
-<div class="card" style="margin-top:16px;">
-  <h3>📌 수급 주목 종목 (2월 26일 기준)</h3>
+<h2>🏆 외국인·기관 연속 순매수 종목 TOP</h2>
+<div class="card">
   <table>
-    <tr><th>종목명</th><th>주가</th><th>등락</th><th>투자포인트</th></tr>
-    <tr>
-          <td><strong>LG화학</strong><br><span class="sub">051910</span></td>
+    <tr><th>종목</th><th>연속 순매수</th><th>투자자</th></tr>
+    <tr><td>코오롱ENP (138490)</td><td class="green">34일</td><td>외국인</td></tr>
+    <tr><td>LX인터내셔널 (001120)</td><td class="green">27일</td><td>기관</td></tr>
+    <tr><td>메리츠금융지주 (138040)</td><td class="green">25일</td><td>외국인·기관</td></tr>
+  </table>
+  <p class="note">출처: 매일경제 마켓 2026.02.27</p>
+</div>
+<div class="card" style="margin-top:16px;">
+  <h3>📌 수급 강세 종목 (2월 26일~27일 기준)</h3>
+  <table><tr><th>종목명</th><th>주가(참고)</th><th>등락</th><th>투자포인트</th></tr><tr><td><strong>삼성전자</strong><br><span class="sub">005930</span></td>
+          <td style="font-weight:700;">~213,000원(2.27 프리마켓)</td>
+          <td style="color:var(--red);font-weight:600;">-2.29%</td>
+          <td class="sub">전일 +7.13% 급등 후 차익실현, 기관 쌍끌이</td></tr><tr><td><strong>SK하이닉스</strong><br><span class="sub">000660</span></td>
+          <td style="font-weight:700;">~1,068,000원(프리마켓)</td>
+          <td style="color:var(--red);font-weight:600;">-2.82%</td>
+          <td class="sub">전일 +7.96% 후 숨고르기, 100만원대 안착</td></tr><tr><td><strong>LG화학</strong><br><span class="sub">051910</span></td>
           <td style="font-weight:700;">~420,000원</td>
           <td style="color:var(--green);font-weight:600;">+상승</td>
-          <td class="sub">외국인 1,200억 순매수 (2월 25일)</td>
-        </tr><tr>
-          <td><strong>삼성전자</strong><br><span class="sub">005930</span></td>
-          <td style="font-weight:700;">~178,600원</td>
-          <td style="color:var(--green);font-weight:600;">+6.0%</td>
-          <td class="sub">기관·개인 쌍끌이 매수</td>
-        </tr><tr>
-          <td><strong>SK하이닉스</strong><br><span class="sub">000660</span></td>
-          <td style="font-weight:700;">~888,000원</td>
-          <td style="color:var(--green);font-weight:600;">+강세</td>
-          <td class="sub">연기금 지속 매수</td>
-        </tr><tr>
-          <td><strong>현대차</strong><br><span class="sub">005380</span></td>
-          <td style="font-weight:700;">~506,000원</td>
-          <td style="color:var(--green);font-weight:600;">+9%↑</td>
-          <td class="sub">개인 매수 주도 +9%</td>
-        </tr><tr>
-          <td><strong>기아</strong><br><span class="sub">000270</span></td>
-          <td style="font-weight:700;">~265,000원</td>
-          <td style="color:var(--green);font-weight:600;">+12%↑</td>
-          <td class="sub">목표가 27만원 상향 (삼성증권)</td>
-        </tr>
-  </table>
-  <div class="note">⚠️ 주가는 참고용 추정치. 투자 전 직접 확인 필요. 출처: 증권사 리포트 / 2026-02-26</div>
+          <td class="sub">외국인 연속 순매수 강세 종목</td></tr><tr><td><strong>메리츠금융지주</strong><br><span class="sub">138040</span></td>
+          <td style="font-weight:700;">~110,000원</td>
+          <td style="color:var(--green);font-weight:600;">+상승</td>
+          <td class="sub">외국인·기관 연속 25일 순매수</td></tr><tr><td><strong>LX인터내셔널</strong><br><span class="sub">001120</span></td>
+          <td style="font-weight:700;">~35,000원</td>
+          <td style="color:var(--green);font-weight:600;">+상승</td>
+          <td class="sub">기관 27일 연속 순매수</td></tr></table>
+  <div class="note">⚠️ 주가는 참고용. 실제 투자 전 증권사 확인 필수. 기준: 2026-02-27</div>
 </div>
-<div class="note" style="margin-top:12px;">출처: 연합뉴스, 매일경제, 이비앤, 조선비즈, 네이버 프리미엄 | 기준일: 2026-02-26</div>
+<div class="note" style="margin-top:12px;">출처: 한국거래소, 매일경제, MBC뉴스, 중앙일보, 뉴스1 | 기준일: 2026-02-27</div>
 </body></html>
