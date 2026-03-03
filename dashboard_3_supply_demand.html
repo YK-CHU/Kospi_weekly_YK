@@ -1,120 +1,115 @@
-<!DOCTYPE html><html lang="ko"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>수급 (Supply & Demand) | KOSPI 대시보드 v6</title>
 <style>
-  :root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;
-        --muted:#8b949e;--green:#3fb950;--red:#f85149;--yellow:#d29922;
-        --blue:#58a6ff;--purple:#bc8cff;--accent:#1f6feb;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;
-       font-size:16px;line-height:1.6;padding:12px;}
-  h1{font-size:clamp(1.4rem,4vw,2rem);margin-bottom:8px;}
-  h2{font-size:clamp(1.1rem,3vw,1.4rem);margin:20px 0 10px;color:var(--blue);}
-  h3{font-size:clamp(0.95rem,2.5vw,1.15rem);margin:12px 0 6px;color:var(--yellow);}
-  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
-  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.78rem;font-weight:600;margin:2px;}
-  .green{color:var(--green);}.red{color:var(--red);}.yellow{color:var(--yellow);}
-  .blue{color:var(--blue);}.purple{color:var(--purple);}
-  .big-num{font-size:clamp(1.5rem,5vw,2.4rem);font-weight:700;}
-  .sub{font-size:0.85rem;color:var(--muted);}
-  .tag-g{background:#1a3d1a;color:var(--green);border:1px solid var(--green);}
-  .tag-r{background:#3d1a1a;color:var(--red);border:1px solid var(--red);}
-  .tag-y{background:#3d3200;color:var(--yellow);border:1px solid var(--yellow);}
-  .tag-b{background:#0d2b4a;color:var(--blue);border:1px solid var(--blue);}
-  table{width:100%;border-collapse:collapse;font-size:0.9rem;}
-  th{background:#1c2128;padding:8px 10px;text-align:left;color:var(--muted);}
-  td{padding:8px 10px;border-bottom:1px solid var(--border);}
-  .nav-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-  .nav-bar a{background:var(--accent);color:#fff;padding:7px 14px;border-radius:6px;
-             text-decoration:none;font-size:0.85rem;font-weight:600;}
-  .nav-bar a:hover{opacity:0.85;}
-  .note{font-size:0.78rem;color:var(--muted);margin-top:4px;}
-  .stock-row{display:flex;justify-content:space-between;align-items:center;
-             padding:6px 0;border-bottom:1px solid var(--border);}
-  .alert-box{border:1px solid var(--yellow);background:#1c1a00;border-radius:8px;
-             padding:12px;margin:12px 0;font-size:0.9rem;}
-  @media(max-width:480px){body{font-size:15px;padding:8px;}
-    th,td{padding:6px 8px;}.nav-bar a{font-size:0.8rem;padding:6px 10px;}}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh}
+  .topbar{background:linear-gradient(135deg,#161b22,#1c2128);border-bottom:1px solid #30363d;
+          padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+  .topbar h1{font-size:1.25rem;font-weight:700;color:#58a6ff}
+  .topbar .meta{font-size:.78rem;color:#8b949e}
+  .holiday-banner{background:linear-gradient(90deg,#3d1f00,#5c2e00);border:1px solid #e3931a;
+                  padding:10px 18px;font-size:.82rem;color:#ffa657;text-align:center;letter-spacing:.3px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px;padding:22px}
+  .card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:18px;transition:.2s}
+  .card:hover{border-color:#58a6ff;box-shadow:0 0 16px rgba(88,166,255,.2)}
+  .card-title{font-size:.78rem;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+  .big-num{font-size:2rem;font-weight:800;line-height:1.1;color:#e6edf3}
+  .big-num.green{color:#3fb950}
+  .big-num.red{color:#f85149}
+  .big-num.amber{color:#ffa657}
+  .change{font-size:.85rem;margin-top:4px}
+  .change.up{color:#3fb950} .change.dn{color:#f85149} .change.neu{color:#8b949e}
+  .divider{border:0;border-top:1px solid #30363d;margin:12px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.85rem}
+  .row .label{color:#8b949e} .row .val{font-weight:600;color:#e6edf3}
+  .row .val.green{color:#3fb950} .row .val.red{color:#f85149} .row .val.amber{color:#ffa657}
+  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.72rem;font-weight:600}
+  .badge.buy{background:rgba(63,185,80,.15);color:#3fb950;border:1px solid #3fb950}
+  .badge.sell{background:rgba(248,81,73,.15);color:#f85149;border:1px solid #f85149}
+  .badge.hold{background:rgba(139,148,158,.15);color:#8b949e;border:1px solid #8b949e}
+  .badge.warn{background:rgba(255,166,87,.15);color:#ffa657;border:1px solid #ffa657}
+  .progress-bar{background:#21262d;border-radius:6px;height:8px;overflow:hidden;margin-top:4px}
+  .progress-bar-fill{height:100%;border-radius:6px;transition:.4s}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+  th{color:#8b949e;font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid #30363d;font-size:.75rem;text-transform:uppercase}
+  td{padding:6px 8px;border-bottom:1px solid #21262d;color:#e6edf3}
+  td.green{color:#3fb950} td.red{color:#f85149} td.amber{color:#ffa657}
+  .back-btn{display:inline-flex;align-items:center;gap:6px;background:#21262d;border:1px solid #30363d;
+            color:#8b949e;text-decoration:none;padding:8px 14px;border-radius:8px;font-size:.8rem;
+            margin:18px 20px 0;transition:.2s}
+  .back-btn:hover{background:#30363d;color:#e6edf3}
+  .source{font-size:.72rem;color:#6e7681;margin-top:8px;text-align:right}
+  .risk-meter{display:flex;align-items:center;gap:10px;margin-top:10px}
+  .risk-label{font-size:.75rem;color:#8b949e;width:80px}
+  .risk-bar-wrap{flex:1;background:#21262d;border-radius:4px;height:10px;overflow:hidden}
+  .risk-bar-fill{height:100%;border-radius:4px}
+  .risk-val{font-size:.8rem;font-weight:700;width:40px;text-align:right}
+  .alert-box{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.4);border-radius:8px;
+             padding:12px;margin-top:10px;font-size:.82rem;color:#f85149}
+  .info-box{background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.3);border-radius:8px;
+            padding:12px;margin-top:10px;font-size:.82rem;color:#79c0ff}
+  .warn-box{background:rgba(255,166,87,.08);border:1px solid rgba(255,166,87,.3);border-radius:8px;
+            padding:12px;margin-top:10px;font-size:.82rem;color:#ffa657}
+  footer{text-align:center;padding:18px;font-size:.75rem;color:#6e7681;border-top:1px solid #21262d;margin-top:10px}
 </style>
-<title>D3 수급</title></head><body>
-<nav class="nav-bar"><a href="dashboard_index.html">🏠 메인</a><a href="dashboard_1_liquidity.html">1️⃣ 유동성</a><a href="dashboard_2_valuation.html">2️⃣ 밸류</a><a href="dashboard_4_industry_cycle.html">4️⃣ 산업사이클</a><a href="dashboard_5_narrative_vs_numbers.html">5️⃣ 내러티브</a><a href="dashboard_6_macro_scenarios.html">6️⃣ 매크로</a><a href="dashboard_7_bankruptcy_risk.html">7️⃣ 부도위험</a><a href="dashboard_neutral.html">8️⃣ 균형분석</a></nav>
-<header style="margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-  <div style="font-size:0.8rem;color:var(--muted);">🗓 2026년 2월 27일 (금) 기준 | 최종 업데이트: 2026-02-27</div>
-  <h1>📊 3단계: 수급 불균형 감지기</h1>
-  <div style="color:var(--muted);font-size:0.95rem;">투자자별 자금 흐름 분석 — 2026년 2월 27일</div>
-</header>
-<div class="alert-box">💰 <strong>어제(2.26) 수급:</strong> 기관 <strong>+1조2,427억</strong>(8거래일 연속 매수) | 개인 <strong>+6,610억</strong> | 외국인 <strong>−2조1,077억</strong> | 2월 누적 외국인 순매도 <strong>−13조4,020억</strong></div>
-
-<h2>💰 2월 26일 투자자별 순매수</h2>
-<div class="grid">
-  <div class="card">
-  <div class="sub">기관 순매수 <span class="badge tag-g">기관</span></div>
-  <div class="big-num" style="color:var(--green);">+1조2,427<span style="font-size:1rem;"> 억원</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">8거래일 연속 매수</span></div>
-  <div class="note">금융투자 주도 시장 견인</div></div>
-  <div class="card">
-  <div class="sub">개인 순매수 <span class="badge tag-g">개인</span></div>
-  <div class="big-num" style="color:var(--green);">+6,610<span style="font-size:1rem;"> 억원</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">개미 매수 지속</span></div>
-  <div class="note">동학개미 줍줍 현상</div></div>
-  <div class="card">
-  <div class="sub">외국인 순매도 <span class="badge tag-r">외인</span></div>
-  <div class="big-num" style="color:var(--red);">−2조1,077<span style="font-size:1rem;"> 억원</span><span style="color:var(--red);font-size:0.9rem;margin-left:8px;">이달 −13.4조 누적</span></div>
-  <div class="note">차익 실현 지속</div></div>
-  <div class="card">
-  <div class="sub">코스닥 지수 <span class="badge tag-g">코스닥</span></div>
-  <div class="big-num" style="color:var(--green);">1,188<span style="font-size:1rem;"> pt</span><span style="color:var(--green);font-size:0.9rem;margin-left:8px;">+1.97% 동반 강세</span></div>
-  <div class="note">AI·반도체 소형주 동반</div></div>
+</head>
+<body>
+<div class="topbar">
+  <h1>📊 수급 (Supply & Demand)</h1>
+  <div class="meta">v6 · 2026년 3월 2일 · 기준</div>
 </div>
-
-<h2>📅 코스피 5,000→6,300 구간 누적 수급</h2>
-<div class="grid">
-  <div class="card">
-    <table>
-      <tr><th>투자자</th><th>누적 순매수(2~26일)</th><th>평가</th></tr>
-      <tr><td>🏛️ 기관</td><td class="green">+4조8,050억</td><td>금융투자 홀로 11조+ 매수</td></tr>
-      <tr><td>👤 개인</td><td class="green">+6조3,330억</td><td>강력 머니무브 주역</td></tr>
-      <tr><td>🌍 외국인</td><td class="red">−13조4,020억</td><td>차익실현·리밸런싱 매도</td></tr>
-    </table>
-    <p class="note">외국인 13.4조 매물을 기관+개인이 흡수 → 강세 지속</p>
-  </div>
-  <div class="card">
-    <h3>🔑 오늘(2.27) 수급 전망</h3>
-    <p>⚠️ NVDA −5.46% → 반도체 차익 압력</p>
-    <p>✅ 개인 저가매수 유입 (NVDA 개미 저가매수 14년래 최고)</p>
-    <p>⚠️ 외국인 매도 지속 가능성</p>
-    <p>✅ 기관 8연속 매수 기조 유지 전망</p>
-  </div>
+<div class="holiday-banner">
+  ⚠️ 국내 증시 오늘(3/2) 대체공휴일 휴장 | 기준: 직전 거래일(2/27) + 미국 3/2 현지시간
 </div>
+<a href="dashboard_index.html" class="back-btn">← 메인으로</a>
+<div class="grid">
 
-<h2>🏆 외국인·기관 연속 순매수 종목 TOP</h2>
 <div class="card">
+  <div class="card-title">📦 주간 수급 (2/23~2/27)</div>
+  <div class="big-num red">-11.79조원</div>
+  <div class="change dn">외국인 순매도 (주간)</div>
+  <hr class="divider">
+  <div class="row"><span class="label">개인 순매수</span><span class="val green">+5.93조원</span></div>
+  <div class="row"><span class="label">기관 순매수</span><span class="val green">+5.54조원</span></div>
+  <div class="row"><span class="label">외국인 순매도</span><span class="val red">-11.79조원</span></div>
+  <hr class="divider">
+  <div class="row"><span class="label">누적 외국인 매도(2월)</span><span class="val red">-13.4조원</span></div>
+  <div class="row"><span class="label">누적 기관 매수(2월)</span><span class="val green">+10.99조원</span></div>
+  <div class="row"><span class="label">누적 개인 매수(2월)</span><span class="val green">+3.62조원</span></div>
+  <div class="info-box">💡 외국인이 지속 이탈해도 기관·개인이 물량 흡수하며 지수 방어 성공!</div>
+  <div class="source">출처: 이투데이, 네이트뉴스 (2026-03-02)</div>
+</div>
+
+<div class="card">
+  <div class="card-title">📊 주요 종목 수급 동향</div>
   <table>
-    <tr><th>종목</th><th>연속 순매수</th><th>투자자</th></tr>
-    <tr><td>코오롱ENP (138490)</td><td class="green">34일</td><td>외국인</td></tr>
-    <tr><td>LX인터내셔널 (001120)</td><td class="green">27일</td><td>기관</td></tr>
-    <tr><td>메리츠금융지주 (138040)</td><td class="green">25일</td><td>외국인·기관</td></tr>
+    <tr><th>종목</th><th>수급 주체</th><th>동향</th><th>금액</th></tr>
+    <tr><td>삼성전자</td><td>기관·개인</td><td class="green">순매수</td><td>2월 거래대금 10조↑</td></tr>
+    <tr><td>SK하이닉스</td><td>기관·개인</td><td class="green">순매수</td><td>전체 33% 비중</td></tr>
+    <tr><td>외국인(반도체)</td><td>외국인</td><td class="red">순매도</td><td>-13.4조(2월)</td></tr>
+    <tr><td>LG화학</td><td>외국인</td><td class="green">순매수</td><td>+1,200억</td></tr>
+    <tr><td>기아</td><td>기관</td><td class="green">순매수</td><td>2/26 +12.7%</td></tr>
   </table>
-  <p class="note">출처: 매일경제 마켓 2026.02.27</p>
+  <hr class="divider">
+  <div class="warn-box">⚠️ 외국인 지속 이탈 중 – 중동 불안이 추가 매도 촉발할 수 있음</div>
+  <div class="source">출처: 뉴스1, 중앙일보, 조선비즈 (2026-03-02)</div>
 </div>
-<div class="card" style="margin-top:16px;">
-  <h3>📌 수급 강세 종목 (2월 26일~27일 기준)</h3>
-  <table><tr><th>종목명</th><th>주가(참고)</th><th>등락</th><th>투자포인트</th></tr><tr><td><strong>삼성전자</strong><br><span class="sub">005930</span></td>
-          <td style="font-weight:700;">~213,000원(2.27 프리마켓)</td>
-          <td style="color:var(--red);font-weight:600;">-2.29%</td>
-          <td class="sub">전일 +7.13% 급등 후 차익실현, 기관 쌍끌이</td></tr><tr><td><strong>SK하이닉스</strong><br><span class="sub">000660</span></td>
-          <td style="font-weight:700;">~1,068,000원(프리마켓)</td>
-          <td style="color:var(--red);font-weight:600;">-2.82%</td>
-          <td class="sub">전일 +7.96% 후 숨고르기, 100만원대 안착</td></tr><tr><td><strong>LG화학</strong><br><span class="sub">051910</span></td>
-          <td style="font-weight:700;">~420,000원</td>
-          <td style="color:var(--green);font-weight:600;">+상승</td>
-          <td class="sub">외국인 연속 순매수 강세 종목</td></tr><tr><td><strong>메리츠금융지주</strong><br><span class="sub">138040</span></td>
-          <td style="font-weight:700;">~110,000원</td>
-          <td style="color:var(--green);font-weight:600;">+상승</td>
-          <td class="sub">외국인·기관 연속 25일 순매수</td></tr><tr><td><strong>LX인터내셔널</strong><br><span class="sub">001120</span></td>
-          <td style="font-weight:700;">~35,000원</td>
-          <td style="color:var(--green);font-weight:600;">+상승</td>
-          <td class="sub">기관 27일 연속 순매수</td></tr></table>
-  <div class="note">⚠️ 주가는 참고용. 실제 투자 전 증권사 확인 필수. 기준: 2026-02-27</div>
+
+<div class="card">
+  <div class="card-title">📉 공매도 & 신용잔고</div>
+  <div class="row"><span class="label">신용잔고(KOSPI)</span><span class="val amber">32조원 (경고 수준)</span></div>
+  <div class="row"><span class="label">2월 일평균 거래대금</span><span class="val green">32.2조원 (사상 최대)</span></div>
+  <div class="row"><span class="label">상장주식 회전율</span><span class="val">28% (3년10개월 최고)</span></div>
+  <hr class="divider">
+  <div class="row"><span class="label">공매도 상위 (3/3 기준)</span><span class="val red">현대건설·삼성전자</span></div>
+  <div class="row"><span class="label">HD현대중공업 공매도</span><span class="val amber">414억 (10위)</span></div>
+  <div class="row"><span class="label">LG에너지솔루션</span><span class="val amber">412억 (11위)</span></div>
+  <div class="alert-box">🚨 신용잔고 32조 = 역대급 레버리지. 시장 급락시 마진콜 위험 존재.</div>
+  <div class="source">출처: 조선비즈, 아시아경제 (2026-03)</div>
 </div>
-<div class="note" style="margin-top:12px;">출처: 한국거래소, 매일경제, MBC뉴스, 중앙일보, 뉴스1 | 기준일: 2026-02-27</div>
+
+</div>
+<footer>데이터 출처: 한국거래소, 연합뉴스, 이투데이, 조선비즈, Investing.com, Yahoo Finance | 최종 업데이트 2026년 3월 2일</footer>
 </body></html>
